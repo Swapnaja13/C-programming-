@@ -1,0 +1,21 @@
+#include<stdio.h>
+
+char *reverse(char str[])
+{
+    static int i=0;
+    static char arr[10];
+    if(*str)
+    {
+        reverse(str+1);
+        arr[i++]= *str;
+    }
+    return arr;
+}
+
+int main()
+{
+    char *ptr;
+    char str[]="Swapnaja";
+    ptr=reverse(str);
+    printf("%s",ptr);
+}
