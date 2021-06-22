@@ -1,0 +1,30 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node{
+    int data;
+    struct node*prev;
+    struct node*next;
+};
+
+void display(struct node*head)
+{
+    if(NULL==head)
+    printf("Linked list is empty\n");
+    
+    else
+    {
+        struct node*ptr=head;
+        while(NULL!=ptr)
+        {
+          printf("%d\n",ptr->data);
+          ptr=ptr->next;  
+        }
+    }
+}
+
+int main()
+{
+    struct node* head=NULL;
+    display(head);
+}
