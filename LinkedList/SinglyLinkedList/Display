@@ -1,3 +1,10 @@
+struct node
+{
+    int data;
+    struct node*link;
+};
+
+
 void display(struct node*head)
 {
     if(NULL==head)
@@ -14,4 +21,11 @@ void display(struct node*head)
         }
     }
     
+}
+
+int main()
+{
+  struct node*head=NULL;
+    display(head);
+    return 0;
 }
