@@ -1,0 +1,42 @@
+struct node*add_at_beg(struct node*head,int d)
+{
+    struct node*ptr=(struct node*)malloc(sizeof(struct node));
+    if(NULL==ptr)   //yoda notation
+    printf("Memory could not be allocated\n");
+    else
+    {
+        ptr->data=d;
+        ptr->link=head;
+        head=ptr;
+        return head;
+    }
+}
+
+
+struct node*add_at_end(struct node*head,int d)
+{
+        struct node*temp= (struct node*)malloc(sizeof(struct node));
+        if(NULL==temp)   //Yoda notation
+        printf("Memory could not be allocated\n");
+        
+        else
+        {
+            struct node*ptr=head;
+            temp->data=d;
+            temp->link=NULL;
+            
+            if(NULL==head)
+            head=temp;
+            
+            else if(NULL==head->link)
+            head->link=temp;
+            
+            else
+            {
+                while(NULL!=ptr->link)
+                    ptr=ptr->link;
+                ptr->link=temp;
+            }
+            return head;
+        }
+}
