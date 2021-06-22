@@ -1,0 +1,17 @@
+void display(struct node*head)
+{
+    if(NULL==head)
+    printf("display-Linked list is empty\n");
+    
+    else
+    {
+        printf("\nLinked list contains\n");
+        struct node*ptr=head;
+        while(NULL!=ptr)
+        {
+            printf("%d\n",ptr->data);
+            ptr=ptr->link;
+        }
+    }
+    
+}
