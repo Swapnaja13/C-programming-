@@ -1,0 +1,60 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node{
+    int data;
+    struct node*link;
+};
+
+void display(struct node*tail)
+{
+    if(NULL==tail)
+    printf("List is empty\n");
+    
+    else
+    {
+        printf("Linked list contains:\n");
+        struct node*ptr=tail->link;
+        do{
+            printf("%d\n",ptr->data);
+            ptr=ptr->link;
+          }
+        while(ptr!=tail->link);
+    }
+}
+
+struct node*add_at_beg(struct node *tail,int data)
+{
+    struct node*ptr=(struct node*)malloc(sizeof(struct node));
+    if(NULL==ptr)  //yoda notation
+    printf("Memory could not be allocated\n");
+    
+    else
+    {
+        ptr->data=data;
+        
+        if(NULL==tail)
+        {
+            ptr->link=ptr;
+            return ptr;
+        }
+        
+        else
+        {
+            ptr->link=tail->link;
+            tail->link=ptr;
+            return tail;
+        }
+    }
+}
+
+int main()
+{
+    struct node*tail=NULL;
+    display(tail);
+    tail=add_at_beg(tail,10);
+    tail=add_at_beg(tail,20);
+    tail=add_at_beg(tail,30);
+    display(tail);
+    return 0;
+}
