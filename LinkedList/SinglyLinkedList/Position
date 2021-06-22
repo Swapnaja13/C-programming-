@@ -1,0 +1,43 @@
+void add_at_pos(struct node*head,int data, int pos)
+{
+    struct node*ptr2=(struct node*)malloc(sizeof(struct node));
+    if(NULL==ptr2)
+    printf("Memory is not allocated\n");
+    
+    else
+    {
+        struct node*ptr=head;
+        ptr2->data=data;
+        ptr2->link=NULL;
+        
+        while(pos!=2)
+        {
+            ptr=ptr->link;
+            pos--;
+        }
+        ptr2->link=ptr->link;
+        ptr->link=ptr2;
+    }
+}
+
+void del_pos_node(struct node*head,int pos)
+{
+    struct node* curr=head;
+    struct node* prev=head;
+    
+    if(NULL==head)
+    printf("Linked list is empty\n");
+    
+    else
+    {
+        while(pos!=1)
+        {
+            prev=curr;
+            curr=curr->link;
+            pos--;
+        }
+        prev->link=curr->link;
+        free(curr);
+        curr=NULL;
+    }
+}
