@@ -1,0 +1,23 @@
+struct node*reverse(struct node*head)
+{
+    if(NULL==head)
+    printf("Linked list is empty\n");
+    
+    else if(NULL==head->link)
+    printf("Only one node in linked list\n");
+    
+    else
+    {
+        struct node*prev=NULL,*next=NULL;
+        
+        while(NULL!=head)
+        {
+            next=head->link;
+            head->link=prev;
+            prev=head;
+            head=next;
+        }
+        head=prev;
+        return head;
+    }
+}
