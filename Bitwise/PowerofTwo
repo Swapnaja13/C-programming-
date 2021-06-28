@@ -1,0 +1,19 @@
+/******************************************************************************
+                            POWER OF TWO
+*******************************************************************************/
+
+#include <stdio.h>
+
+int main()
+{
+    int num;
+    scanf("%d",&num);
+    if(num&(num-1))
+    printf("Num is not a power of two\n");
+    else
+    printf("Num is power of two\n");
+    return 0;
+}
+
+ /* First x in the below expression is for the case when x is 0 */
+       /*  x && (!(x&(x-1)));
