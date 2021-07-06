@@ -1,0 +1,1716 @@
+/*******************************************************************************
+**                        KPIT Technologies Limited                           **
+**                                                                            **
+** KPIT Technologies Limited owns all the rights to this work. This work      **
+** shall not be copied, reproduced, used, modified or its information         **
+** disclosed without the prior written authorization of KPIT Technologies     **
+** Limited.                                                                   **
+**                                                                            **
+**  MODULE : Cdd_Dma.c                                                   	  **
+**                                                                            **
+**  TARGET : TC37x TP                                                         **
+**                                                                            **
+**  PURPOSE : Source file for ADC Module Register definition                  **
+**                                                                            **
+**  PLATFORM DEPENDANT [yes/no]:  Yes                                         **
+**                                                                            **
+**  TO BE CHANGED BY USER [yes/no]:  no                                       **
+**                                                                            **
+*******************************************************************************/
+/*----------------------------------Includes----------------------------------*/
+/******************************************************************************/
+#include "Cdd_Dma.h"
+// Ifx_P *port11 = &MODULE_P11;
+/******************************************************************************/
+/*-----------------------------------Macros-----------------------------------*/
+/******************************************************************************/
+
+/******************************************************************************/
+/*--------------------------------Enumerations--------------------------------*/
+/******************************************************************************/
+
+/******************************************************************************/
+/*-----------------------------Data Structures--------------------------------*/
+/******************************************************************************/
+
+/******************************************************************************/
+/*------------------------------Global variables------------------------------*/
+/******************************************************************************/
+/* Dma global data */
+/*Creating structure members for DMA channels*/
+Dma_Adc Dma_Adc_Channels; 
+
+/*Creating Variable for DMA destination buffer*/
+/*Creating Variable for DMA destination buffer for G0_CH4*/
+static uint16 Dest_GDPS_BOT_P16V_MEAS_UC;
+/*Creating Variable for DMA destination buffer for G0_CH5*/
+static uint16 Dest_KL30_FILT_MEAS_UC;
+/*Creating Variable for DMA destination buffer for G0_CH6*/
+static uint16 Dest_CURR_PHASE_U_MEAS1_UC;
+/*Creating Variable for DMA destination buffer for G0_CH7*/
+static uint16 Dest_KL15_MEAS_UC;
+/*Creating Variable for DMA destination buffer for G1_CH5*/
+static uint16 Dest_VCCA_MEAS_UC;
+/*Creating Variable for DMA destination buffer for G1_CH6*/
+static uint16 Dest_CURR_PHASE_V_MEAS1_UC;
+/*Creating Variable for DMA destination buffer for G1_CH7*/
+static uint16 Dest_VAUX_UC_MEAS_UC;
+/*Creating Variable for DMA destination buffer for G2_CH2*/
+static uint16 Dest_KL30_FILT0_MEAS_UC;
+/*Creating Variable for DMA destination buffer for G2_CH3*/
+static uint16 Dest_Motor_TEMP_SENSE1_UC;
+/*Creating Variable for DMA destination buffer for G2_CH6*/
+static uint16 Dest_CURR_PHASE_W_MEAS1_UC;
+/*Creating Variable for DMA destination buffer for G2_CH7*/
+static uint16 Dest_BUCK_BOOST_P16V_MEAS_UC;
+/*Creating Variable for DMA destination buffer for G3_CH2*/
+static uint16 Dest_KL30_INV_MEAS_UC;
+/*Creating Variable for DMA destination buffer for G3_CH3*/
+static uint16 Dest_CB_TEMP_SENSE_UC;
+/*Creating Variable for DMA destination buffer for G3_CH6*/
+static uint16 Dest_HVDC_MEAS1_UC;
+/*Creating Variable for DMA destination buffer for G4_CH3*/
+static uint16 Dest_P5V_EXT_MEAS_UC;
+/*Creating Variable for DMA destination buffer for G4_CH4*/
+//static uint16 Dest_PL_POSITIONSENSOR1_UC;
+/*Creating Variable for DMA destination buffer for G4_CH5*/
+static uint16 Dest_PARKLOCK_VBB_MEAS_UC;
+/*Creating Variable for DMA destination buffer for G8_CH4*/
+static uint16 Dest_RDC_COS_MEAS1_UC;
+/*Creating Variable for DMA destination buffer for G8_CH5*/
+static uint16 Dest_RDC_COS0_MEAS1_UC;
+/*Creating Variable for DMA destination buffer for G9_CH4*/
+static uint16 Dest_RDC_SIN_MEAS1_UC;
+/*Creating Variable for DMA destination buffer for G9_CH5*/
+static uint16 Dest_RDC_SIN0_MEAS1_UC;
+/*Creating Variable for DMA destination buffer for G10_CH4*/
+static uint16 Dest_RDC_EXC_MEAS_UC;
+/*Creating Variable for DMA destination buffer for G10_CH5*/
+static uint16 Dest_RDC_EXC0_MEAS_UC;
+/*Creating Variable for DMA destination buffer for G10_CH8*/
+static uint16 Dest_VDD_MEAS_UC;
+/*Creating Variable for DMA destination buffer for G10_CH9*/
+static uint16 Dest_P5V_RDC_MEAS_UC;
+/*Creating Variable for DMA destination buffer for G11_CH12*/
+static uint16 Dest_CAN_P5V_LDO_MEAS_UC;
+/*Creating Variable for DMA destination buffer for G11_CH13*/
+static uint16 Dest_REF_P2V5;
+/*Creating Variable for DMA destination buffer for G11_CH14*/
+static uint16 Dest_FL3_P5V_LDO_MEAS_UC;
+/*Creating Variable for DMA destination buffer for G11_CH15*/
+static uint16 Dest_P6V5_VPRE_MEAS_UC;
+/*Creating Variable for DMA destination buffer for FC0_CH0*/
+//static uint16 Dest_FLYBACK_P16V_OV_ST_UC;
+/*Creating Variable for DMA destination buffer for FC1_CH0*/
+//static uint16 Dest_BUCK_BOOST_OV_ST_UC;
+/*Creating Variable for DMA destination buffer for FC3_CH0*/
+//static uint16 Dest_HVDC_OV_MON_UC;
+
+/*Creating Variable for DMA destination buffer for CH1*/
+static uint16 Dest_DSADC_HVDC_MEAS0_UC;
+/*Creating Variable for DMA destination buffer for CH3*/
+static uint16 Dest_DSADC_CURR_PHASE_U_MEAS0_UC;
+/*Creating Variable for DMA destination buffer for CH4*/
+static uint16 Dest_DSADC_CURR_PHASE_V_MEAS0_UC;
+/*Creating Variable for DMA destination buffer for CH5*/
+static uint16 Dest_DSADC_CURR_PHASE_W_MEAS0_UC;
+
+/*Creating Variable for DMA destination buffer for TIM0_5*/
+static uint32 Dest_TIMESTAMP_A;
+/*Creating Variable for DMA destination buffer for TIM0_1*/
+static uint32 Dest_TIMESTAMP_B;
+
+
+/*Creating Variable for DMA destination circular buffer for G1_CH0,G1_CH2,G1_CH3 and G1_CH4*/
+/*__align(64)*/ static uint16 Dest_CircularBuffer_G1[4];
+
+/*Creating Variable for DMA destination circular buffer for G3_CH0 and G3_CH1*/
+/*__align(32)*/ static uint16 Dest_CircularBuffer_G3[2];
+
+/*Creating Variable for DMA destination circular buffer for G4_CH1 and G4_CH2 */
+/*__align(32)*/ static uint16 Dest_CircularBuffer_G4[2];
+
+ /*Creating Variable for DMA destination circular buffer for G8_CH8 and G8_CH13 */
+/*__align(32)*/ static uint16 Dest_CircularBuffer_G8[2];
+
+  /*Creating Variable for DMA destination circular buffer for G8_CH14 and G8_CH15 */
+//__align(32) static uint16 Dest_CircularBuffer_Hw_Version_G8[2];
+
+/*Creating Variable for DMA destination circular buffer for CH0*/
+/*__align(32)*/ static uint16 Dest_CircularBuffer_CH0[2];
+/*Creating Variable for DMA destination circular buffer for CH2*/
+/*__align(32)*/ static uint16 Dest_CircularBuffer_CH2[2];
+
+
+
+/******************************************************************************/
+/*-------------------------Function Prototypes--------------------------------*/
+/******************************************************************************/
+
+/******************************************************************************/
+/*------------------------Private Variables/Constants-------------------------*/
+/******************************************************************************/
+
+/******************************************************************************/
+/*-------------------------Function Implementations---------------------------*/
+/******************************************************************************/
+
+ /*This function is called from main during initialization phase*/
+void DMA_CDD_Init(void)
+{
+	 IfxDma_Dma               dma;
+    /* create module config */
+    IfxDma_Dma_Config        dmaConfig;
+
+	
+ /* initial configuration for all channels */
+  /* initial configuration for EVADC channel G0_CH4 */
+	IfxDma_Dma_ChannelConfig cfg0_4;
+	/* initial configuration for EVADC channel G0_CH5 */
+	IfxDma_Dma_ChannelConfig cfg0_5;
+	/* initial configuration for EVADC channel G0_CH6 */
+    IfxDma_Dma_ChannelConfig cfg0_6;
+	/* initial configuration for EVADC channel G0_CH7 */
+	IfxDma_Dma_ChannelConfig cfg0_7;
+	/* initial configuration for EVADC channel G1_CH5 */
+	IfxDma_Dma_ChannelConfig cfg1_5;
+	/* initial configuration for EVADC channel G1_CH6 */
+	IfxDma_Dma_ChannelConfig cfg1_6;
+	/* initial configuration for EVADC channel G1_CH7 */
+	IfxDma_Dma_ChannelConfig cfg1_7;
+	/* initial configuration for EVADC channel G2_CH2 */
+	IfxDma_Dma_ChannelConfig cfg2_2;
+	/* initial configuration for EVADC channel G2_CH3 */
+	IfxDma_Dma_ChannelConfig cfg2_3;
+	/* initial configuration for EVADC channel G2_CH6 */
+	IfxDma_Dma_ChannelConfig cfg2_6;
+	/* initial configuration for EVADC channel G2_CH7 */
+    IfxDma_Dma_ChannelConfig cfg2_7;
+	/* initial configuration for EVADC channel G3_CH2 */
+	IfxDma_Dma_ChannelConfig cfg3_2;
+	/* initial configuration for EVADC channel G3_CH3 */
+	IfxDma_Dma_ChannelConfig cfg3_3;
+	/* initial configuration for EVADC channel G3_CH6 */
+    IfxDma_Dma_ChannelConfig cfg3_6;
+	/* initial configuration for EVADC channel G4_CH3 */
+	IfxDma_Dma_ChannelConfig cfg4_3;
+	/* initial configuration for EVADC channel G4_CH4 */
+    //IfxDma_Dma_ChannelConfig cfg4_4;
+	/* initial configuration for EVADC channel G4_CH5 */
+    IfxDma_Dma_ChannelConfig cfg4_5;
+	/* initial configuration for EVADC channel G8_CH4 */
+    IfxDma_Dma_ChannelConfig cfg8_4;
+    /* initial configuration for EVADC channel G8_CH5 */
+    IfxDma_Dma_ChannelConfig cfg8_5;
+    /* initial configuration for EVADC channel G9_CH4*/
+    IfxDma_Dma_ChannelConfig cfg9_4;
+    /* initial configuration for EVADC channel G9_CH5 */
+    IfxDma_Dma_ChannelConfig cfg9_5;
+    /* initial configuration for EVADC channel G10_CH4 */
+    IfxDma_Dma_ChannelConfig cfg10_4;
+    /* initial configuration for EVADC channel G10_CH5 */
+    IfxDma_Dma_ChannelConfig cfg10_5;
+    /* initial configuration for EVADC channel G10_CH8 */
+    IfxDma_Dma_ChannelConfig cfg10_8;
+    /* initial configuration for EVADC channel G10_CH9 */
+    IfxDma_Dma_ChannelConfig cfg10_9;
+    /* initial configuration for EVADC channel G11_CH12 */
+    IfxDma_Dma_ChannelConfig cfg11_12;
+    /* initial configuration for EVADC channel G11_CH13 */
+    IfxDma_Dma_ChannelConfig cfg11_13;
+    /* initial configuration for EVADC channel G11_CH14 */
+    IfxDma_Dma_ChannelConfig cfg11_14;
+    /* initial configuration for EVADC channel G11_CH15 */
+    IfxDma_Dma_ChannelConfig cfg11_15;
+    /* initial configuration for EVADC channel G2_CH0 */
+    //IfxDma_Dma_ChannelConfig cfg2_0;
+    /* initial configuration for EVADC channel G2_CH1 */
+   // IfxDma_Dma_ChannelConfig cfg2_1;
+    /* initial configuration for EVADC channel G9_CH1 */
+    //IfxDma_Dma_ChannelConfig cfg9_1;
+    /* initial configuration for EVADC channel G1_CH0 */
+    IfxDma_Dma_ChannelConfig cfg1_0;
+    /* initial configuration for EVADC channel G3_CH0 */
+    IfxDma_Dma_ChannelConfig cfg3_0;
+    /* initial configuration for EVADC channel G4_CH1 */
+    IfxDma_Dma_ChannelConfig cfg4_1;
+    /* initial configuration for EVADC channel G4_CH1 */
+    IfxDma_Dma_ChannelConfig cfg8_8;
+    /* initial configuration for EVADC channel G8_CH14 */
+    //IfxDma_Dma_ChannelConfig cfg8_14;
+
+
+	/* initial configuration for DSADC channel CH0 */
+	IfxDma_Dma_ChannelConfig cfg0;
+	/* initial configuration for DSADC channel CH2 */
+    IfxDma_Dma_ChannelConfig cfg2;
+	/* initial configuration for DSADC channel CH1 */
+    IfxDma_Dma_ChannelConfig cfg1;
+	/* initial configuration for DSADC channel CH3 */
+    IfxDma_Dma_ChannelConfig cfg3;
+	/* initial configuration for DSADC channel CH4 */
+    IfxDma_Dma_ChannelConfig cfg4;
+	/* initial configuration for DSADC channel CH5 */
+    IfxDma_Dma_ChannelConfig cfg5;
+
+
+	/* initial configuration for channel TIM0_5 */
+	IfxDma_Dma_ChannelConfig cfgtim0_5;
+	/* initial configuration for channel TIM0_1 */
+    IfxDma_Dma_ChannelConfig cfgtim0_1;
+
+	
+	/*PRQA S 0303 ++*/
+	/*VIOLATES MISRA2012_RULE_11.4; Module Address cast to pointer , No impact*/
+    IfxDma_Dma_initModuleConfig(&dmaConfig, &MODULE_DMA);
+
+    /* initialize module */
+   
+    IfxDma_Dma_initModule(&dma, &dmaConfig);
+
+
+	/*DMA channel initialization*/
+	/*DMA channel initialization for G0CH4*/
+    IfxDma_Dma_initChannelConfig(&cfg0_4, &dma);
+	/*DMA channel initialization for G0CH5*/
+	IfxDma_Dma_initChannelConfig(&cfg0_5, &dma);
+	/*DMA channel initialization for G0CH6*/
+	IfxDma_Dma_initChannelConfig(&cfg0_6, &dma);
+	/*DMA channel initialization for G0CH7*/
+	IfxDma_Dma_initChannelConfig(&cfg0_7, &dma);
+	/*DMA channel initialization for G1CH5*/
+	IfxDma_Dma_initChannelConfig(&cfg1_5, &dma);
+	/*DMA channel initialization for G1CH6*/
+	IfxDma_Dma_initChannelConfig(&cfg1_6, &dma);
+	/*DMA channel initialization for G1CH7*/
+	IfxDma_Dma_initChannelConfig(&cfg1_7, &dma);
+	/*DMA channel initialization for G2CH2*/
+	IfxDma_Dma_initChannelConfig(&cfg2_2, &dma);
+	/*DMA channel initialization for G2CH3*/
+	IfxDma_Dma_initChannelConfig(&cfg2_3, &dma);
+	/*DMA channel initialization for G2CH6*/
+	IfxDma_Dma_initChannelConfig(&cfg2_6, &dma);
+	/*DMA channel initialization for G2CH7*/
+    IfxDma_Dma_initChannelConfig(&cfg2_7, &dma);
+	/*DMA channel initialization for G3CH2*/
+	IfxDma_Dma_initChannelConfig(&cfg3_2, &dma);
+	/*DMA channel initialization for G3CH3*/
+	IfxDma_Dma_initChannelConfig(&cfg3_3, &dma);
+	/*DMA channel initialization for G3CH6*/
+	IfxDma_Dma_initChannelConfig(&cfg3_6, &dma);
+	/*DMA channel initialization for G4_CH3*/
+    IfxDma_Dma_initChannelConfig(&cfg4_3, &dma);
+	/*DMA channel initialization for G4_CH4*/
+    //IfxDma_Dma_initChannelConfig(&cfg4_4, &dma);
+	/*DMA channel initialization for G4_CH5*/
+    IfxDma_Dma_initChannelConfig(&cfg4_5, &dma);
+	/*DMA channel initialization for G8_CH4*/
+    IfxDma_Dma_initChannelConfig(&cfg8_4, &dma);
+    /*DMA channel initialization for G8_CH5*/
+    IfxDma_Dma_initChannelConfig(&cfg8_5, &dma);
+
+    /*DMA channel initialization for G9_CH4 */
+    IfxDma_Dma_initChannelConfig(&cfg9_4, &dma);
+    /*DMA channel initialization for G9_CH5 */
+    IfxDma_Dma_initChannelConfig(&cfg9_5, &dma);
+    /*DMA channel initialization for G10_CH4 */
+    IfxDma_Dma_initChannelConfig(&cfg10_4, &dma);
+    /*DMA channel initialization for G10_CH5 */
+    IfxDma_Dma_initChannelConfig(&cfg10_5, &dma);
+    /*DMA channel initialization for G10_CH8 */
+    IfxDma_Dma_initChannelConfig(&cfg10_8, &dma);
+    /*DMA channel initialization for G10_CH9 */
+    IfxDma_Dma_initChannelConfig(&cfg10_9, &dma);
+    /*DMA channel initialization for G11_CH12 */
+    IfxDma_Dma_initChannelConfig(&cfg11_12, &dma);
+    /*DMA channel initialization for G11_CH13 */
+    IfxDma_Dma_initChannelConfig(&cfg11_13, &dma);
+    /*DMA channel initialization for G11_CH14 */
+    IfxDma_Dma_initChannelConfig(&cfg11_14, &dma);
+    /*DMA channel initialization for G11_CH15 */
+    IfxDma_Dma_initChannelConfig(&cfg11_15, &dma);
+    /*DMA channel initialization for G2CH0 */
+    //IfxDma_Dma_initChannelConfig(&cfg2_0, &dma);
+    /*DMA channel initialization for G2CH1 */
+    //IfxDma_Dma_initChannelConfig(&cfg2_1, &dma);
+    /*DMA channel initialization for G9CH1 */
+    //IfxDma_Dma_initChannelConfig(&cfg9_1, &dma);
+
+    /*DMA channel initialization for G1CH0 */
+    IfxDma_Dma_initChannelConfig(&cfg1_0, &dma);
+    /*DMA channel initialization for G3CH0 */
+    IfxDma_Dma_initChannelConfig(&cfg3_0, &dma);
+    /*DMA channel initialization for G4CH1 */
+    IfxDma_Dma_initChannelConfig(&cfg4_1, &dma);
+    /*DMA channel initialization for G8CH8 */
+    IfxDma_Dma_initChannelConfig(&cfg8_8, &dma);
+    /*DMA channel initialization for G8CH14 */
+    //IfxDma_Dma_initChannelConfig(&cfg8_14, &dma);
+
+
+    /*DMA channel initialization for CH0 */
+    IfxDma_Dma_initChannelConfig(&cfg0, &dma);
+    /*DMA channel initialization for CH2 */
+    IfxDma_Dma_initChannelConfig(&cfg2, &dma);
+    /*DMA channel initialization for CH1 */
+    IfxDma_Dma_initChannelConfig(&cfg1, &dma);
+    /*DMA channel initialization for CH3 */
+    IfxDma_Dma_initChannelConfig(&cfg3, &dma);
+    /*DMA channel initialization for CH5 */
+    IfxDma_Dma_initChannelConfig(&cfg5, &dma);
+
+
+	/*DMA channel initialization for TIM0_5 */
+    IfxDma_Dma_initChannelConfig(&cfgtim0_5, &dma);
+	/*DMA channel initialization for TIM0_1*/
+    IfxDma_Dma_initChannelConfig(&cfgtim0_1, &dma);
+
+
+	/* following configuration is used by individual channel */
+    cfg0_4.transferCount                    = 1;
+    cfg0_4.requestMode                      = IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg0_4.moveSize                         = IfxDma_ChannelMoveSize_16bit;
+    cfg0_4.operationMode                    = IfxDma_ChannelOperationMode_continuous;
+    cfg0_4.sourceAddressCircularRange 		= IfxDma_ChannelIncrementCircular_none;
+    cfg0_4.destinationAddressCircularRange 	= IfxDma_ChannelIncrementCircular_none;
+    cfg0_4.destinationCircularBufferEnabled = 1;
+    cfg0_4.sourceCircularBufferEnabled      = 1;
+
+
+	/* following configuration is used by individual channel */
+    cfg0_5.transferCount                    = 1;
+    cfg0_5.requestMode                      = IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg0_5.moveSize                         = IfxDma_ChannelMoveSize_16bit;
+    cfg0_5.operationMode                    = IfxDma_ChannelOperationMode_continuous;
+    cfg0_5.sourceAddressCircularRange 		= IfxDma_ChannelIncrementCircular_none;
+    cfg0_5.destinationAddressCircularRange 	= IfxDma_ChannelIncrementCircular_none;
+    cfg0_5.destinationCircularBufferEnabled = 1;
+    cfg0_5.sourceCircularBufferEnabled      = 1;
+
+
+	/* following configuration is used by individual channel */
+    cfg0_6.transferCount                    = 1;
+    cfg0_6.requestMode                      = IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg0_6.moveSize                         = IfxDma_ChannelMoveSize_16bit;
+    cfg0_6.operationMode                    = IfxDma_ChannelOperationMode_continuous;
+    cfg0_6.sourceAddressCircularRange 		= IfxDma_ChannelIncrementCircular_none;
+    cfg0_6.destinationAddressCircularRange 	= IfxDma_ChannelIncrementCircular_none;
+    cfg0_6.destinationCircularBufferEnabled = 1;
+    cfg0_6.sourceCircularBufferEnabled      = 1;
+
+	/* following configuration is used by individual channel */
+    cfg0_7.transferCount                    = 1;
+    cfg0_7.requestMode                      = IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg0_7.moveSize                         = IfxDma_ChannelMoveSize_16bit;
+    cfg0_7.operationMode                    = IfxDma_ChannelOperationMode_continuous;
+    cfg0_7.sourceAddressCircularRange 		= IfxDma_ChannelIncrementCircular_none;
+    cfg0_7.destinationAddressCircularRange 	= IfxDma_ChannelIncrementCircular_none;
+    cfg0_7.destinationCircularBufferEnabled = 1;
+    cfg0_7.sourceCircularBufferEnabled      = 1;
+
+	/* following configuration is used by individual channel */
+	cfg1_0.transferCount                    = 1;
+    cfg1_0.requestMode                      = IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg1_0.moveSize                         = IfxDma_ChannelMoveSize_16bit;
+    cfg1_0.operationMode                    = IfxDma_ChannelOperationMode_continuous;
+    cfg1_0.sourceAddressCircularRange 		= IfxDma_ChannelIncrementCircular_none;
+    cfg1_0.destinationAddressCircularRange 	= IfxDma_ChannelIncrementCircular_none;
+    cfg1_0.destinationCircularBufferEnabled = 1;
+    cfg1_0.sourceCircularBufferEnabled      = 1;
+
+	
+	/* following configuration is used by individual channel */
+    cfg1_5.transferCount                    = 1;
+    cfg1_5.requestMode                      = IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg1_5.moveSize                         = IfxDma_ChannelMoveSize_16bit;
+    cfg1_5.operationMode                    = IfxDma_ChannelOperationMode_continuous;
+    cfg1_5.sourceAddressCircularRange 		= IfxDma_ChannelIncrementCircular_none;
+    cfg1_5.destinationAddressCircularRange 	= IfxDma_ChannelIncrementCircular_none;
+    cfg1_5.destinationCircularBufferEnabled = 1;
+    cfg1_5.sourceCircularBufferEnabled      = 1;
+
+	
+	/* following configuration is used by individual channel */
+    cfg1_6.transferCount                    = 1;
+    cfg1_6.requestMode                      = IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg1_6.moveSize                         = IfxDma_ChannelMoveSize_16bit;
+    cfg1_6.operationMode                    = IfxDma_ChannelOperationMode_continuous;
+    cfg1_6.sourceAddressCircularRange 		= IfxDma_ChannelIncrementCircular_none;
+    cfg1_6.destinationAddressCircularRange 	= IfxDma_ChannelIncrementCircular_none;
+    cfg1_6.destinationCircularBufferEnabled = 1;
+    cfg1_6.sourceCircularBufferEnabled      = 1;
+
+
+	/* following configuration is used by individual channel */
+    cfg1_7.transferCount                    	= 1;
+    cfg1_7.requestMode                      	= IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg1_7.moveSize                         	= IfxDma_ChannelMoveSize_16bit;
+    cfg1_7.operationMode                    	= IfxDma_ChannelOperationMode_continuous;
+    cfg1_7.sourceAddressCircularRange          	= IfxDma_ChannelIncrementCircular_none;
+    cfg1_7.destinationAddressIncrementDirection = IfxDma_ChannelIncrementDirection_positive;
+    cfg1_7.destinationAddressIncrementStep 		= IfxDma_ChannelIncrementStep_1;
+    cfg1_7.destinationAddressCircularRange 		= IfxDma_ChannelIncrementCircular_4;
+    cfg1_7.destinationCircularBufferEnabled 	= 1;
+    cfg1_7.sourceCircularBufferEnabled      	= 1;
+
+	/* following configuration is used by individual channel */
+    cfg2_2.transferCount                    	= 1;
+    cfg2_2.requestMode                      	= IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg2_2.moveSize                         	= IfxDma_ChannelMoveSize_16bit;
+    cfg2_2.operationMode                    	= IfxDma_ChannelOperationMode_continuous;
+    cfg2_2.sourceAddressCircularRange          	= IfxDma_ChannelIncrementCircular_none;
+    cfg2_2.destinationAddressIncrementDirection = IfxDma_ChannelIncrementDirection_positive;
+    cfg2_2.destinationAddressIncrementStep 		= IfxDma_ChannelIncrementStep_1;
+    cfg2_2.destinationAddressCircularRange 		= IfxDma_ChannelIncrementCircular_4;
+    cfg2_2.destinationCircularBufferEnabled 	= 1;
+    cfg2_2.sourceCircularBufferEnabled      	= 1;
+
+
+	/* following configuration is used by individual channel */
+	cfg2_3.transferCount                    	= 1;
+    cfg2_3.requestMode                      	= IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg2_3.moveSize                         	= IfxDma_ChannelMoveSize_16bit;
+    cfg2_3.operationMode                    	= IfxDma_ChannelOperationMode_continuous;
+    cfg2_3.sourceAddressCircularRange          	= IfxDma_ChannelIncrementCircular_none;
+    cfg2_3.destinationAddressIncrementDirection = IfxDma_ChannelIncrementDirection_positive;
+    cfg2_3.destinationAddressIncrementStep 		= IfxDma_ChannelIncrementStep_1;
+    cfg2_3.destinationAddressCircularRange 		= IfxDma_ChannelIncrementCircular_4;
+    cfg2_3.destinationCircularBufferEnabled 	= 1;
+    cfg2_3.sourceCircularBufferEnabled      	= 1;
+
+	
+	/* following configuration is used by individual channel */
+    cfg2_6.transferCount                    = 1;
+    cfg2_6.requestMode                      = IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg2_6.moveSize                         = IfxDma_ChannelMoveSize_16bit;
+    cfg2_6.operationMode                    = IfxDma_ChannelOperationMode_continuous;
+    cfg2_6.sourceAddressCircularRange 		= IfxDma_ChannelIncrementCircular_none;
+    cfg2_6.destinationAddressCircularRange 	= IfxDma_ChannelIncrementCircular_none;
+    cfg2_6.destinationCircularBufferEnabled = 1;
+    cfg2_6.sourceCircularBufferEnabled      = 1;
+
+	/* following configuration is used by individual channel */
+    cfg2_7.transferCount                    = 1;
+    cfg2_7.requestMode                      = IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg2_7.moveSize                         = IfxDma_ChannelMoveSize_16bit;
+    cfg2_7.operationMode                    = IfxDma_ChannelOperationMode_continuous;
+    cfg2_7.sourceAddressCircularRange 		= IfxDma_ChannelIncrementCircular_none;
+    cfg2_7.destinationAddressCircularRange 	= IfxDma_ChannelIncrementCircular_none;
+    cfg2_7.destinationCircularBufferEnabled = 1;
+    cfg2_7.sourceCircularBufferEnabled      = 1;
+
+	
+	/* following configuration is used by individual channel */
+	cfg3_0.transferCount                    = 1;
+    cfg3_0.requestMode                      = IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg3_0.moveSize                         = IfxDma_ChannelMoveSize_16bit;
+    cfg3_0.operationMode                    = IfxDma_ChannelOperationMode_continuous;
+    cfg3_0.sourceAddressCircularRange 		= IfxDma_ChannelIncrementCircular_none;
+    cfg3_0.destinationAddressCircularRange 	= IfxDma_ChannelIncrementCircular_none;
+    cfg3_0.destinationCircularBufferEnabled = 1;
+    cfg3_0.sourceCircularBufferEnabled      = 1;
+
+
+	/* following configuration is used by individual channel */
+    cfg3_2.transferCount                    = 1;
+    cfg3_2.requestMode                      = IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg3_2.moveSize                         = IfxDma_ChannelMoveSize_16bit;
+    cfg3_2.operationMode                    = IfxDma_ChannelOperationMode_continuous;
+    cfg3_2.sourceAddressCircularRange 		= IfxDma_ChannelIncrementCircular_none;
+    cfg3_2.destinationAddressCircularRange 	= IfxDma_ChannelIncrementCircular_none;
+    cfg3_2.destinationCircularBufferEnabled = 1;
+    cfg3_2.sourceCircularBufferEnabled      = 1;
+
+
+	/* following configuration is used by individual channel */
+	cfg3_3.transferCount                    = 1;
+    cfg3_3.requestMode                      = IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg3_3.moveSize                         = IfxDma_ChannelMoveSize_16bit;
+    cfg3_3.operationMode                    = IfxDma_ChannelOperationMode_continuous;
+    cfg3_3.sourceAddressCircularRange 		= IfxDma_ChannelIncrementCircular_none;
+    cfg3_3.destinationAddressCircularRange 	= IfxDma_ChannelIncrementCircular_none;
+    cfg3_3.destinationCircularBufferEnabled = 1;
+    cfg3_3.sourceCircularBufferEnabled      = 1;
+
+
+	/* following configuration is used by individual channel */
+    cfg3_6.transferCount                    = 1;
+    cfg3_6.requestMode                      = IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg3_6.moveSize                         = IfxDma_ChannelMoveSize_16bit;
+    cfg3_6.operationMode                    = IfxDma_ChannelOperationMode_continuous;
+    cfg3_6.sourceAddressCircularRange 		= IfxDma_ChannelIncrementCircular_none;
+    cfg3_6.destinationAddressCircularRange 	= IfxDma_ChannelIncrementCircular_none;
+    cfg3_6.destinationCircularBufferEnabled = 1;
+    cfg3_6.sourceCircularBufferEnabled      = 1;
+
+	/* following configuration is used by individual channel */
+    cfg4_1.transferCount                    = 1;
+    cfg4_1.requestMode                      = IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg4_1.moveSize                         = IfxDma_ChannelMoveSize_16bit;
+    cfg4_1.operationMode                    = IfxDma_ChannelOperationMode_continuous;
+    cfg4_1.sourceAddressCircularRange 		= IfxDma_ChannelIncrementCircular_none;
+    cfg4_1.destinationAddressCircularRange 	= IfxDma_ChannelIncrementCircular_none;
+    cfg4_1.destinationCircularBufferEnabled = 1;
+    cfg4_1.sourceCircularBufferEnabled      = 1;
+
+
+	/* following configuration is used by individual channel */
+    cfg4_3.transferCount                    = 1;
+    cfg4_3.requestMode                      = IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg4_3.moveSize                         = IfxDma_ChannelMoveSize_16bit;
+    cfg4_3.operationMode                    = IfxDma_ChannelOperationMode_continuous;
+    cfg4_3.sourceAddressCircularRange 		= IfxDma_ChannelIncrementCircular_none;
+    cfg4_3.destinationAddressCircularRange 	= IfxDma_ChannelIncrementCircular_none;
+    cfg4_3.destinationCircularBufferEnabled = 1;
+    cfg4_3.sourceCircularBufferEnabled      = 1;
+
+
+	/* following configuration is used by individual channel */
+/*    cfg4_4.transferCount                    	= 1;
+    cfg4_4.requestMode                      	= IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg4_4.moveSize                         	= IfxDma_ChannelMoveSize_16bit;
+    cfg4_4.operationMode                    	= IfxDma_ChannelOperationMode_continuous;
+    cfg4_4.sourceAddressCircularRange          	= IfxDma_ChannelIncrementCircular_none;
+    cfg4_4.destinationAddressIncrementDirection = IfxDma_ChannelIncrementDirection_positive;
+    cfg4_4.destinationAddressIncrementStep 		= IfxDma_ChannelIncrementStep_1;
+    cfg4_4.destinationAddressCircularRange 		= IfxDma_ChannelIncrementCircular_8;
+    cfg4_4.destinationCircularBufferEnabled 	= 1;
+    cfg4_4.sourceCircularBufferEnabled      	= 1; */
+
+
+	/* following configuration is used by individual channel */
+    cfg4_5.transferCount                    	= 1;
+    cfg4_5.requestMode                      	= IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg4_5.moveSize                         	= IfxDma_ChannelMoveSize_16bit;
+    cfg4_5.operationMode                    	= IfxDma_ChannelOperationMode_continuous;
+    cfg4_5.sourceAddressCircularRange          	= IfxDma_ChannelIncrementCircular_none;
+    cfg4_5.destinationAddressIncrementDirection = IfxDma_ChannelIncrementDirection_positive;
+    cfg4_5.destinationAddressIncrementStep 		= IfxDma_ChannelIncrementStep_1;
+    cfg4_5.destinationAddressCircularRange 		= IfxDma_ChannelIncrementCircular_8;
+    cfg4_5.destinationCircularBufferEnabled 	= 1;
+    cfg4_5.sourceCircularBufferEnabled      	= 1;
+
+	/* following configuration is used by individual channel */
+    cfg8_4.transferCount                    	= 1;
+    cfg8_4.requestMode                      	= IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg8_4.moveSize                         	= IfxDma_ChannelMoveSize_16bit;
+    cfg8_4.operationMode                    	= IfxDma_ChannelOperationMode_continuous;
+    cfg8_4.sourceAddressCircularRange          	= IfxDma_ChannelIncrementCircular_none;
+    cfg8_4.destinationAddressIncrementDirection = IfxDma_ChannelIncrementDirection_positive;
+    cfg8_4.destinationAddressIncrementStep 		= IfxDma_ChannelIncrementStep_1;
+    cfg8_4.destinationAddressCircularRange 		= IfxDma_ChannelIncrementCircular_8;
+    cfg8_4.destinationCircularBufferEnabled 	= 1;
+    cfg8_4.sourceCircularBufferEnabled      	= 1;
+
+	/* following configuration is used by individual channel */
+    cfg8_5.transferCount                    	= 1;
+    cfg8_5.requestMode                      	= IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg8_5.moveSize                         	= IfxDma_ChannelMoveSize_16bit;
+    cfg8_5.operationMode                    	= IfxDma_ChannelOperationMode_continuous;
+    cfg8_5.sourceAddressCircularRange          	= IfxDma_ChannelIncrementCircular_none;
+    cfg8_5.destinationAddressIncrementDirection = IfxDma_ChannelIncrementDirection_positive;
+    cfg8_5.destinationAddressIncrementStep 		= IfxDma_ChannelIncrementStep_1;
+    cfg8_5.destinationAddressCircularRange 		= IfxDma_ChannelIncrementCircular_8;
+    cfg8_5.destinationCircularBufferEnabled 	= 1;
+    cfg8_5.sourceCircularBufferEnabled      	= 1;
+
+	/* following configuration is used by individual channel */
+    cfg8_8.transferCount                    	= 1;
+    cfg8_8.requestMode                      	= IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg8_8.moveSize                         	= IfxDma_ChannelMoveSize_16bit;
+    cfg8_8.operationMode                    	= IfxDma_ChannelOperationMode_continuous;
+    cfg8_8.sourceAddressCircularRange          	= IfxDma_ChannelIncrementCircular_none;
+    cfg8_8.destinationAddressIncrementDirection = IfxDma_ChannelIncrementDirection_positive;
+    cfg8_8.destinationAddressIncrementStep 		= IfxDma_ChannelIncrementStep_1;
+    cfg8_8.destinationAddressCircularRange 		= IfxDma_ChannelIncrementCircular_8;
+    cfg8_8.destinationCircularBufferEnabled 	= 1;
+    cfg8_8.sourceCircularBufferEnabled      	= 1;
+
+	/* following configuration is used by individual channel */
+   /* cfg8_14.transferCount                    	= 1;
+    cfg8_14.requestMode                      	= IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg8_14.moveSize                         	= IfxDma_ChannelMoveSize_16bit;
+    cfg8_14.operationMode                    	= IfxDma_ChannelOperationMode_continuous;
+    cfg8_14.sourceAddressCircularRange          	= IfxDma_ChannelIncrementCircular_none;
+    cfg8_14.destinationAddressIncrementDirection = IfxDma_ChannelIncrementDirection_positive;
+    cfg8_14.destinationAddressIncrementStep 		= IfxDma_ChannelIncrementStep_1;
+    cfg8_14.destinationAddressCircularRange 		= IfxDma_ChannelIncrementCircular_8;
+    cfg8_14.destinationCircularBufferEnabled 	= 1;
+    cfg8_14.sourceCircularBufferEnabled      	= 1; */
+
+	/* following configuration is used by individual channel */
+    cfg9_4.transferCount                    	= 1;
+    cfg9_4.requestMode                      	= IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg9_4.moveSize                         	= IfxDma_ChannelMoveSize_16bit;
+    cfg9_4.operationMode                    	= IfxDma_ChannelOperationMode_continuous;
+    cfg9_4.sourceAddressCircularRange          	= IfxDma_ChannelIncrementCircular_none;
+    cfg9_4.destinationAddressIncrementDirection = IfxDma_ChannelIncrementDirection_positive;
+    cfg9_4.destinationAddressIncrementStep 		= IfxDma_ChannelIncrementStep_1;
+    cfg9_4.destinationAddressCircularRange 		= IfxDma_ChannelIncrementCircular_8;
+    cfg9_4.destinationCircularBufferEnabled 	= 1;
+    cfg9_4.sourceCircularBufferEnabled      	= 1;
+
+	/* following configuration is used by individual channel */
+    cfg9_5.transferCount                    	= 1;
+    cfg9_5.requestMode                      	= IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg9_5.moveSize                         	= IfxDma_ChannelMoveSize_16bit;
+    cfg9_5.operationMode                    	= IfxDma_ChannelOperationMode_continuous;
+    cfg9_5.sourceAddressCircularRange          	= IfxDma_ChannelIncrementCircular_none;
+    cfg9_5.destinationAddressIncrementDirection = IfxDma_ChannelIncrementDirection_positive;
+    cfg9_5.destinationAddressIncrementStep 		= IfxDma_ChannelIncrementStep_1;
+    cfg9_5.destinationAddressCircularRange 		= IfxDma_ChannelIncrementCircular_8;
+    cfg9_5.destinationCircularBufferEnabled 	= 1;
+    cfg9_5.sourceCircularBufferEnabled      	= 1;
+
+	/* following configuration is used by individual channel */
+    cfg10_4.transferCount                    	= 1;
+    cfg10_4.requestMode                      	= IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg10_4.moveSize                         	= IfxDma_ChannelMoveSize_16bit;
+    cfg10_4.operationMode                    	= IfxDma_ChannelOperationMode_continuous;
+    cfg10_4.sourceAddressCircularRange          = IfxDma_ChannelIncrementCircular_none;
+    cfg10_4.destinationAddressIncrementDirection= IfxDma_ChannelIncrementDirection_positive;
+    cfg10_4.destinationAddressIncrementStep 	= IfxDma_ChannelIncrementStep_1;
+    cfg10_4.destinationAddressCircularRange 	= IfxDma_ChannelIncrementCircular_8;
+    cfg10_4.destinationCircularBufferEnabled 	= 1;
+    cfg10_4.sourceCircularBufferEnabled      	= 1;
+
+	/* following configuration is used by individual channel */
+    cfg10_5.transferCount                    	= 1;
+    cfg10_5.requestMode                      	= IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg10_5.moveSize                         	= IfxDma_ChannelMoveSize_16bit;
+    cfg10_5.operationMode                    	= IfxDma_ChannelOperationMode_continuous;
+    cfg10_5.sourceAddressCircularRange          = IfxDma_ChannelIncrementCircular_none;
+    cfg10_5.destinationAddressIncrementDirection= IfxDma_ChannelIncrementDirection_positive;
+    cfg10_5.destinationAddressIncrementStep 	= IfxDma_ChannelIncrementStep_1;
+    cfg10_5.destinationAddressCircularRange 	= IfxDma_ChannelIncrementCircular_8;
+    cfg10_5.destinationCircularBufferEnabled 	= 1;
+    cfg10_5.sourceCircularBufferEnabled      	= 1;
+
+	/* following configuration is used by individual channel */
+    cfg10_8.transferCount                    	= 1;
+    cfg10_8.requestMode                      	= IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg10_8.moveSize                         	= IfxDma_ChannelMoveSize_16bit;
+    cfg10_8.operationMode                    	= IfxDma_ChannelOperationMode_continuous;
+    cfg10_8.sourceAddressCircularRange          = IfxDma_ChannelIncrementCircular_none;
+    cfg10_8.destinationAddressIncrementDirection= IfxDma_ChannelIncrementDirection_positive;
+    cfg10_8.destinationAddressIncrementStep 	= IfxDma_ChannelIncrementStep_1;
+    cfg10_8.destinationAddressCircularRange 	= IfxDma_ChannelIncrementCircular_8;
+    cfg10_8.destinationCircularBufferEnabled 	= 1;
+    cfg10_8.sourceCircularBufferEnabled      	= 1;
+
+	/* following configuration is used by individual channel */
+    cfg10_9.transferCount                    	= 1;
+    cfg10_9.requestMode                      	= IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg10_9.moveSize                         	= IfxDma_ChannelMoveSize_16bit;
+    cfg10_9.operationMode                    	= IfxDma_ChannelOperationMode_continuous;
+    cfg10_9.sourceAddressCircularRange          = IfxDma_ChannelIncrementCircular_none;
+    cfg10_9.destinationAddressIncrementDirection= IfxDma_ChannelIncrementDirection_positive;
+    cfg10_9.destinationAddressIncrementStep 	= IfxDma_ChannelIncrementStep_1;
+    cfg10_9.destinationAddressCircularRange 	= IfxDma_ChannelIncrementCircular_8;
+    cfg10_9.destinationCircularBufferEnabled 	= 1;
+    cfg10_9.sourceCircularBufferEnabled      	= 1;
+
+
+	/* following configuration is used by individual channel */
+    cfg11_12.transferCount                    	= 1;
+    cfg11_12.requestMode                      	= IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg11_12.moveSize                         	= IfxDma_ChannelMoveSize_16bit;
+    cfg11_12.operationMode                    	= IfxDma_ChannelOperationMode_continuous;
+    cfg11_12.sourceAddressCircularRange          = IfxDma_ChannelIncrementCircular_none;
+    cfg11_12.destinationAddressIncrementDirection= IfxDma_ChannelIncrementDirection_positive;
+    cfg11_12.destinationAddressIncrementStep 	= IfxDma_ChannelIncrementStep_1;
+    cfg11_12.destinationAddressCircularRange 	= IfxDma_ChannelIncrementCircular_8;
+    cfg11_12.destinationCircularBufferEnabled 	= 1;
+    cfg11_12.sourceCircularBufferEnabled      	= 1;
+
+
+    /* following configuration is used by individual channel */
+    cfg11_13.transferCount                    	= 1;
+    cfg11_13.requestMode                      	= IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg11_13.moveSize                         	= IfxDma_ChannelMoveSize_16bit;
+    cfg11_13.operationMode                    	= IfxDma_ChannelOperationMode_continuous;
+    cfg11_13.sourceAddressCircularRange 		= IfxDma_ChannelIncrementCircular_none;
+    cfg11_13.destinationAddressCircularRange 	= IfxDma_ChannelIncrementCircular_none;
+    cfg11_13.destinationCircularBufferEnabled 	= 1;
+    cfg11_13.sourceCircularBufferEnabled      	= 1;
+
+	/* following configuration is used by individual channel */
+    cfg11_14.transferCount                    	= 1;
+    cfg11_14.requestMode                      	= IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg11_14.moveSize                         	= IfxDma_ChannelMoveSize_16bit;
+    cfg11_14.operationMode                    	= IfxDma_ChannelOperationMode_continuous;
+    cfg11_14.sourceAddressCircularRange          = IfxDma_ChannelIncrementCircular_none;
+    cfg11_14.destinationAddressIncrementDirection= IfxDma_ChannelIncrementDirection_positive;
+    cfg11_14.destinationAddressIncrementStep 	= IfxDma_ChannelIncrementStep_1;
+    cfg11_14.destinationAddressCircularRange 	= IfxDma_ChannelIncrementCircular_8;
+    cfg11_14.destinationCircularBufferEnabled 	= 1;
+    cfg11_14.sourceCircularBufferEnabled      	= 1;
+
+	/* following configuration is used by individual channel */
+    cfg11_15.transferCount                    	= 1;
+    cfg11_15.requestMode                      	= IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg11_15.moveSize                         	= IfxDma_ChannelMoveSize_16bit;
+    cfg11_15.operationMode                    	= IfxDma_ChannelOperationMode_continuous;
+    cfg11_15.sourceAddressCircularRange          = IfxDma_ChannelIncrementCircular_none;
+    cfg11_15.destinationAddressIncrementDirection= IfxDma_ChannelIncrementDirection_positive;
+    cfg11_15.destinationAddressIncrementStep 	= IfxDma_ChannelIncrementStep_1;
+    cfg11_15.destinationAddressCircularRange 	= IfxDma_ChannelIncrementCircular_8;
+    cfg11_15.destinationCircularBufferEnabled 	= 1;
+    cfg11_15.sourceCircularBufferEnabled      	= 1;
+
+	/* following configuration is used by individual channel */
+    /*cfg2_0.transferCount                    	= 1;
+    cfg2_0.requestMode                      	= IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg2_0.moveSize                         	= IfxDma_ChannelMoveSize_16bit;
+    cfg2_0.operationMode                    	= IfxDma_ChannelOperationMode_continuous;
+    cfg2_0.sourceAddressCircularRange           = IfxDma_ChannelIncrementCircular_none;
+    cfg2_0.destinationAddressIncrementDirection = IfxDma_ChannelIncrementDirection_positive;
+    cfg2_0.destinationAddressIncrementStep 	    = IfxDma_ChannelIncrementStep_1;
+    cfg2_0.destinationAddressCircularRange 	    = IfxDma_ChannelIncrementCircular_8;
+    cfg2_0.destinationCircularBufferEnabled 	= 1;
+    cfg2_0.sourceCircularBufferEnabled      	= 1;*/
+
+	/* following configuration is used by individual channel */
+    /*cfg2_1.transferCount                    	= 1;
+    cfg2_1.requestMode                      	= IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg2_1.moveSize                         	= IfxDma_ChannelMoveSize_16bit;
+    cfg2_1.operationMode                    	= IfxDma_ChannelOperationMode_continuous;
+    cfg2_1.sourceAddressCircularRange           = IfxDma_ChannelIncrementCircular_none;
+    cfg2_1.destinationAddressIncrementDirection = IfxDma_ChannelIncrementDirection_positive;
+    cfg2_1.destinationAddressIncrementStep 	    = IfxDma_ChannelIncrementStep_1;
+    cfg2_1.destinationAddressCircularRange 	    = IfxDma_ChannelIncrementCircular_8;
+    cfg2_1.destinationCircularBufferEnabled 	= 1;
+    cfg2_1.sourceCircularBufferEnabled      	= 1;*/
+
+	/* following configuration is used by individual channel */
+   /* cfg9_1.transferCount                    	= 1;
+    cfg9_1.requestMode                      	= IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg9_1.moveSize                         	= IfxDma_ChannelMoveSize_16bit;
+    cfg9_1.operationMode                    	= IfxDma_ChannelOperationMode_continuous;
+    cfg9_1.sourceAddressCircularRange           = IfxDma_ChannelIncrementCircular_none;
+    cfg9_1.destinationAddressIncrementDirection = IfxDma_ChannelIncrementDirection_positive;
+    cfg9_1.destinationAddressIncrementStep 	    = IfxDma_ChannelIncrementStep_1;
+    cfg9_1.destinationAddressCircularRange 	    = IfxDma_ChannelIncrementCircular_8;
+    cfg9_1.destinationCircularBufferEnabled 	= 1;
+    cfg9_1.sourceCircularBufferEnabled      	= 1;*/
+
+	/* following configuration is used by individual channel */
+    cfg0.transferCount                    	= 1;
+    cfg0.requestMode                      	= IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg0.moveSize                         	= IfxDma_ChannelMoveSize_16bit;
+    cfg0.operationMode                    	= IfxDma_ChannelOperationMode_continuous;
+    cfg0.sourceAddressCircularRange           = IfxDma_ChannelIncrementCircular_none;
+    cfg0.destinationAddressIncrementDirection = IfxDma_ChannelIncrementDirection_positive;
+    cfg0.destinationAddressIncrementStep 	    = IfxDma_ChannelIncrementStep_1;
+    cfg0.destinationAddressCircularRange 	    = IfxDma_ChannelIncrementCircular_8;
+    cfg0.destinationCircularBufferEnabled 	= 1;
+    cfg0.sourceCircularBufferEnabled      	= 1;
+
+	/* following configuration is used by individual channel */
+    cfg3.transferCount                    	= 1;
+    cfg3.requestMode                      	= IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg3.moveSize                         	= IfxDma_ChannelMoveSize_16bit;
+    cfg3.operationMode                    	= IfxDma_ChannelOperationMode_continuous;
+    cfg3.sourceAddressCircularRange           = IfxDma_ChannelIncrementCircular_none;
+    cfg3.destinationAddressIncrementDirection = IfxDma_ChannelIncrementDirection_positive;
+    cfg3.destinationAddressIncrementStep 	    = IfxDma_ChannelIncrementStep_1;
+    cfg3.destinationAddressCircularRange 	    = IfxDma_ChannelIncrementCircular_8;
+    cfg3.destinationCircularBufferEnabled 	= 1;
+    cfg3.sourceCircularBufferEnabled      	= 1;
+
+	/* following configuration is used by individual channel */
+    cfg1.transferCount                    	= 1;
+    cfg1.requestMode                      	= IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg1.moveSize                         	= IfxDma_ChannelMoveSize_16bit;
+    cfg1.operationMode                    	= IfxDma_ChannelOperationMode_continuous;
+    cfg1.sourceAddressCircularRange           = IfxDma_ChannelIncrementCircular_none;
+    cfg1.destinationAddressIncrementDirection = IfxDma_ChannelIncrementDirection_positive;
+    cfg1.destinationAddressIncrementStep 	    = IfxDma_ChannelIncrementStep_1;
+    cfg1.destinationAddressCircularRange 	    = IfxDma_ChannelIncrementCircular_8;
+    cfg1.destinationCircularBufferEnabled 	= 1;
+    cfg1.sourceCircularBufferEnabled      	= 1;
+
+	/* following configuration is used by individual channel */
+    cfg2.transferCount                    	= 1;
+    cfg2.requestMode                      	= IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg2.moveSize                         	= IfxDma_ChannelMoveSize_16bit;
+    cfg2.operationMode                    	= IfxDma_ChannelOperationMode_continuous;
+    cfg2.sourceAddressCircularRange           = IfxDma_ChannelIncrementCircular_none;
+    cfg2.destinationAddressIncrementDirection = IfxDma_ChannelIncrementDirection_positive;
+    cfg2.destinationAddressIncrementStep 	    = IfxDma_ChannelIncrementStep_1;
+    cfg2.destinationAddressCircularRange 	    = IfxDma_ChannelIncrementCircular_8;
+    cfg2.destinationCircularBufferEnabled 	= 1;
+    cfg2.sourceCircularBufferEnabled      	= 1;
+
+	/* following configuration is used by individual channel */
+    cfg4.transferCount                    	= 1;
+    cfg4.requestMode                      	= IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg4.moveSize                         	= IfxDma_ChannelMoveSize_16bit;
+    cfg4.operationMode                    	= IfxDma_ChannelOperationMode_continuous;
+    cfg4.sourceAddressCircularRange           = IfxDma_ChannelIncrementCircular_none;
+    cfg4.destinationAddressIncrementDirection = IfxDma_ChannelIncrementDirection_positive;
+    cfg4.destinationAddressIncrementStep 	    = IfxDma_ChannelIncrementStep_1;
+    cfg4.destinationAddressCircularRange 	    = IfxDma_ChannelIncrementCircular_8;
+    cfg4.destinationCircularBufferEnabled 	= 1;
+    cfg4.sourceCircularBufferEnabled      	= 1;
+
+	/* following configuration is used by individual channel */
+    cfg5.transferCount                    	= 1;
+    cfg5.requestMode                      	= IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfg5.moveSize                         	= IfxDma_ChannelMoveSize_16bit;
+    cfg5.operationMode                    	= IfxDma_ChannelOperationMode_continuous;
+    cfg5.sourceAddressCircularRange           = IfxDma_ChannelIncrementCircular_none;
+    cfg5.destinationAddressIncrementDirection = IfxDma_ChannelIncrementDirection_positive;
+    cfg5.destinationAddressIncrementStep 	    = IfxDma_ChannelIncrementStep_1;
+    cfg5.destinationAddressCircularRange 	    = IfxDma_ChannelIncrementCircular_8;
+    cfg5.destinationCircularBufferEnabled 	= 1;
+    cfg5.sourceCircularBufferEnabled      	= 1;
+
+    /* following configuration is used by individual channel */
+    cfgtim0_1.transferCount                    	= 1;
+    cfgtim0_1.requestMode                      	= IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfgtim0_1.moveSize                         	= IfxDma_ChannelMoveSize_32bit;
+    cfgtim0_1.operationMode                    	= IfxDma_ChannelOperationMode_continuous;
+    cfgtim0_1.sourceAddressCircularRange        = IfxDma_ChannelIncrementCircular_8;
+    cfgtim0_1.sourceAddressIncrementStep        = IfxDma_ChannelIncrementStep_1;
+    cfgtim0_1.sourceAddressIncrementDirection   =  IfxDma_ChannelIncrementDirection_positive;
+    cfgtim0_1.destinationAddressIncrementDirection  = IfxDma_ChannelIncrementDirection_positive;
+    cfgtim0_1.destinationAddressIncrementStep 		= IfxDma_ChannelIncrementStep_1;
+    cfgtim0_1.destinationAddressCircularRange 		= IfxDma_ChannelIncrementCircular_8;
+    cfgtim0_1.destinationCircularBufferEnabled 	= 1;
+    cfgtim0_1.sourceCircularBufferEnabled      	= 1;
+
+    /* following configuration is used by individual channel */
+    cfgtim0_5.transferCount                    	= 1;
+    cfgtim0_5.requestMode                      	= IfxDma_ChannelRequestMode_completeTransactionPerRequest;
+    cfgtim0_5.moveSize                         	= IfxDma_ChannelMoveSize_32bit;
+    cfgtim0_5.operationMode                    	= IfxDma_ChannelOperationMode_continuous;
+    cfgtim0_5.sourceAddressCircularRange        = IfxDma_ChannelIncrementCircular_8;
+    cfgtim0_5.sourceAddressIncrementStep        = IfxDma_ChannelIncrementStep_1;
+    cfgtim0_5.sourceAddressIncrementDirection   = IfxDma_ChannelIncrementDirection_negative;
+    cfgtim0_5.destinationAddressIncrementDirection  = IfxDma_ChannelIncrementDirection_positive;
+    cfgtim0_5.destinationAddressIncrementStep 		= IfxDma_ChannelIncrementStep_1;
+    cfgtim0_5.destinationAddressCircularRange 		= IfxDma_ChannelIncrementCircular_8;
+    cfgtim0_5.destinationCircularBufferEnabled 	= 1;
+    cfgtim0_5.sourceCircularBufferEnabled      	= 1;
+
+
+    /* channel specific configuration */
+
+    cfg0_4.channelId          = IfxDma_ChannelId_29;
+    cfg0_4.sourceAddress      = 0xF0020710U;
+    cfg0_4.destinationAddress = (uint32)&Dest_GDPS_BOT_P16V_MEAS_UC;
+    cfg0_4.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[28], &cfg0_4);
+
+	/* channel specific configuration */
+    cfg0_5.channelId          = IfxDma_ChannelId_28;
+    cfg0_5.sourceAddress      = 0xF0020714U;
+    cfg0_5.destinationAddress = (uint32)&Dest_KL30_FILT_MEAS_UC;
+    cfg0_5.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[27], &cfg0_5);
+	
+	/* channel specific configuration */
+    cfg0_6.channelId          = IfxDma_ChannelId_41;
+    cfg0_6.sourceAddress      = 0xF0020718U;
+    cfg0_6.destinationAddress = (uint32)&Dest_CURR_PHASE_U_MEAS1_UC;
+    cfg0_6.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[40], &cfg0_6);
+	
+	/* channel specific configuration */
+    cfg0_7.channelId          = IfxDma_ChannelId_27;
+    cfg0_7.sourceAddress      = 0xF002071CU;
+    cfg0_7.destinationAddress = (uint32)&Dest_KL15_MEAS_UC;
+    cfg0_7.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[26], &cfg0_7);
+
+	/* channel specific configuration */
+	cfg1_0.channelId          = IfxDma_ChannelId_26;
+    cfg1_0.sourceAddress      = 0xF0020B00U;
+    cfg1_0.destinationAddress = (uint32)&Dest_CircularBuffer_G1;
+    cfg1_0.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[25], &cfg1_0);
+	
+	/* channel specific configuration */
+    cfg1_5.channelId          = IfxDma_ChannelId_25;
+    cfg1_5.sourceAddress      = 0XF0020B14U;
+    cfg1_5.destinationAddress = (uint32)&Dest_VCCA_MEAS_UC;
+    cfg1_5.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[24], &cfg1_5);
+	
+	/* channel specific configuration */
+    cfg1_6.channelId          = IfxDma_ChannelId_40;
+    cfg1_6.sourceAddress      = 0xF0020B18U;
+    cfg1_6.destinationAddress = (uint32)&Dest_CURR_PHASE_V_MEAS1_UC;
+    cfg1_6.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[39], &cfg1_6);
+	
+	/* channel specific configuration */
+    cfg1_7.channelId          = IfxDma_ChannelId_24;
+    cfg1_7.sourceAddress      = 0xF0020B1CU;
+    cfg1_7.destinationAddress = (uint32)&Dest_VAUX_UC_MEAS_UC;
+    cfg1_7.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[23], &cfg1_7);
+	
+	/* channel specific configuration */
+    cfg2_2.channelId          = IfxDma_ChannelId_23;
+    cfg2_2.sourceAddress      = 0xF0020F08U;
+    cfg2_2.destinationAddress = (uint32)&Dest_KL30_FILT0_MEAS_UC;
+    cfg2_2.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[22], &cfg2_2);
+
+	/* channel specific configuration */
+	cfg2_3.channelId          = IfxDma_ChannelId_10;
+    cfg2_3.sourceAddress      = 0xF0020F0CU;
+    cfg2_3.destinationAddress = (uint32)&Dest_Motor_TEMP_SENSE1_UC;
+    cfg2_3.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[9], &cfg2_3);
+
+	/* channel specific configuration */
+    cfg2_6.channelId          = IfxDma_ChannelId_39;
+    cfg2_6.sourceAddress      = 0xF0020F10U;
+    cfg2_6.destinationAddress = (uint32)&Dest_CURR_PHASE_W_MEAS1_UC;
+    cfg2_6.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[6], &cfg2_6);
+	
+	/* channel specific configuration */
+    cfg2_7.channelId          = IfxDma_ChannelId_22;
+    cfg2_7.sourceAddress      = 0xF0020F1CU;
+    cfg2_7.destinationAddress = (uint32)& Dest_BUCK_BOOST_P16V_MEAS_UC;
+    cfg2_7.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[21], &cfg2_7);
+
+	/* channel specific configuration */
+    cfg3_0.channelId          = IfxDma_ChannelId_9;
+    cfg3_0.sourceAddress      = 0xF0021300U;
+    cfg3_0.destinationAddress = (uint32)&Dest_CircularBuffer_G3;
+    cfg3_0.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[8], &cfg3_0);
+
+	/* channel specific configuration */
+    cfg3_2.channelId          = IfxDma_ChannelId_21;
+    cfg3_2.sourceAddress      = 0xF0021308U;
+    cfg3_2.destinationAddress = (uint32)&Dest_KL30_INV_MEAS_UC;
+    cfg3_2.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[20], &cfg3_2);
+	
+	/* channel specific configuration */
+	cfg3_3.channelId          = IfxDma_ChannelId_8;
+    cfg3_3.sourceAddress      = 0xF002130CU;
+    cfg3_3.destinationAddress = (uint32)&Dest_CB_TEMP_SENSE_UC;
+    cfg3_3.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[7], &cfg3_3);
+	
+	
+	/* channel specific configuration */
+    cfg3_6.channelId          = IfxDma_ChannelId_38;
+    cfg3_6.sourceAddress      = 0xF0021318U;
+    cfg3_6.destinationAddress = (uint32)&Dest_HVDC_MEAS1_UC;
+    cfg3_6.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[37], &cfg3_6);
+	
+	/* channel specific configuration */
+    cfg4_1.channelId          = IfxDma_ChannelId_37;
+    cfg4_1.sourceAddress      = 0xF0021704U;
+    cfg4_1.destinationAddress = (uint32)&Dest_CircularBuffer_G4;
+    cfg4_1.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[36], &cfg4_1);
+
+	/* channel specific configuration */
+    cfg4_3.channelId          = IfxDma_ChannelId_20;
+    cfg4_3.sourceAddress      = 0xF002170CU;
+    cfg4_3.destinationAddress = (uint32)&Dest_P5V_EXT_MEAS_UC;
+    cfg4_3.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[19], &cfg4_3);
+
+	/* channel specific configuration */
+    /*cfg4_4.channelId          = IfxDma_ChannelId_19;
+    cfg4_4.sourceAddress      = 0xF0021710U;
+    cfg4_4.destinationAddress = (uint32)&Dest_PL_POSITIONSENSOR1_UC;
+    cfg4_4.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[18], &cfg4_4);*/
+
+	/* channel specific configuration */
+    cfg4_5.channelId          = IfxDma_ChannelId_19;
+    cfg4_5.sourceAddress      = 0xF0021714U;
+    cfg4_5.destinationAddress = (uint32)&Dest_PARKLOCK_VBB_MEAS_UC;
+    cfg4_5.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[18], &cfg4_5);
+
+	/* channel specific configuration */
+    cfg8_4.channelId          = IfxDma_ChannelId_36;
+    cfg8_4.sourceAddress      = 0xF0022710U;
+    cfg8_4.destinationAddress = (uint32)&Dest_RDC_COS_MEAS1_UC;
+    cfg8_4.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[35], &cfg8_4);
+
+	/* channel specific configuration */
+    cfg8_5.channelId          = IfxDma_ChannelId_35;
+    cfg8_5.sourceAddress      = 0xF0022714U;
+    cfg8_5.destinationAddress = (uint32)&Dest_RDC_COS0_MEAS1_UC;
+    cfg8_5.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[34], &cfg8_5);
+
+	/* channel specific configuration */
+    cfg8_8.channelId          = IfxDma_ChannelId_17;
+    cfg8_8.sourceAddress      = 0xF0022720U;
+    cfg8_8.destinationAddress = (uint32)&Dest_CircularBuffer_G8;
+    cfg8_8.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[17], &cfg8_8);
+
+	/* channel specific configuration */
+    /*cfg8_14.channelId          = IfxDma_ChannelId_30;
+    cfg8_14.sourceAddress      = 0xF0022738U;
+    cfg8_14.destinationAddress = (uint32)&Dest_CircularBuffer_Hw_Version_G8;
+    cfg8_14.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[29], &cfg8_14);*/
+
+	/* channel specific configuration */
+    cfg9_4.channelId          = IfxDma_ChannelId_34;
+    cfg9_4.sourceAddress      = 0xF0022B10U;
+    cfg9_4.destinationAddress = (uint32)&Dest_RDC_SIN_MEAS1_UC;
+    cfg9_4.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[33], &cfg9_4);
+
+	/* channel specific configuration */
+    cfg9_5.channelId          = IfxDma_ChannelId_33;
+    cfg9_5.sourceAddress      = 0xF0022B14U;
+    cfg9_5.destinationAddress = (uint32)&Dest_RDC_SIN0_MEAS1_UC;
+    cfg9_5.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[32], &cfg9_5);
+
+	/* channel specific configuration */
+    cfg10_4.channelId          = IfxDma_ChannelId_32;
+    cfg10_4.sourceAddress      = 0xF0022F10U;
+    cfg10_4.destinationAddress = (uint32)&Dest_RDC_EXC_MEAS_UC;
+    cfg10_4.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[17], &cfg10_4);
+
+	/* channel specific configuration */
+    cfg10_5.channelId          = IfxDma_ChannelId_31;
+    cfg10_5.sourceAddress      = 0xF0022F14U;
+    cfg10_5.destinationAddress = (uint32)&Dest_RDC_EXC0_MEAS_UC;
+    cfg10_5.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[17], &cfg10_5);
+
+	/* channel specific configuration */
+    cfg10_8.channelId          = IfxDma_ChannelId_16;
+    cfg10_8.sourceAddress      = 0xF0022F20U;
+    cfg10_8.destinationAddress = (uint32)&Dest_VDD_MEAS_UC;
+    cfg10_8.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[15], &cfg10_8);
+
+	/* channel specific configuration */
+    cfg10_9.channelId          = IfxDma_ChannelId_15;
+    cfg10_9.sourceAddress      = 0xF0022F24U;
+    cfg10_9.destinationAddress = (uint32)&Dest_P5V_RDC_MEAS_UC;
+    cfg10_9.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[14], &cfg10_9);
+
+	/* channel specific configuration */
+    cfg11_12.channelId          = IfxDma_ChannelId_14;
+    cfg11_12.sourceAddress      = 0xF0023330U;
+    cfg11_12.destinationAddress = (uint32)&Dest_CAN_P5V_LDO_MEAS_UC;
+    cfg11_12.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[13], &cfg11_12);
+
+	/* channel specific configuration */
+    cfg11_13.channelId          = IfxDma_ChannelId_13;
+    cfg11_13.sourceAddress      = 0xF0023334U;
+    cfg11_13.destinationAddress = (uint32)&Dest_REF_P2V5;
+    cfg11_13.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[12], &cfg11_13);
+
+	/* channel specific configuration */
+    cfg11_14.channelId          = IfxDma_ChannelId_12;
+    cfg11_14.sourceAddress      = 0xF0023338U;
+    cfg11_14.destinationAddress = (uint32)&Dest_FL3_P5V_LDO_MEAS_UC;
+    cfg11_14.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[11], &cfg11_14);
+
+	/* channel specific configuration */
+    cfg11_15.channelId          = IfxDma_ChannelId_11;
+    cfg11_15.sourceAddress      = 0xF002333CU;
+    cfg11_15.destinationAddress = (uint32)&Dest_P6V5_VPRE_MEAS_UC;
+    cfg11_15.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[10], &cfg11_15);
+
+	/* channel specific configuration */
+   /* cfg2_0.channelId          = IfxDma_ChannelId_44;
+    cfg2_0.sourceAddress      = 0xF0020F00U;
+    cfg2_0.destinationAddress = (uint32)&Dest_FLYBACK_P16V_OV_ST_UC;
+    cfg2_0.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[43], &cfg2_0);*/
+
+	/* channel specific configuration */
+    /*cfg2_1.channelId          = IfxDma_ChannelId_43;
+    cfg2_1.sourceAddress      = 0xF0020F04U;
+    cfg2_1.destinationAddress = (uint32)&Dest_BUCK_BOOST_OV_ST_UC;
+    cfg2_1.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[42], &cfg2_1);*/
+
+	/* channel specific configuration */
+    /*cfg9_1.channelId          = IfxDma_ChannelId_42;
+    cfg9_1.sourceAddress      = 0xF0022B04U;
+    cfg9_1.destinationAddress = (uint32)&Dest_BUCK_BOOST_OV_ST_UC;
+    cfg9_1.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[41], &cfg9_1);*/
+
+	/* channel specific configuration */
+    cfg0.channelId          = IfxDma_ChannelId_52;
+    cfg0.sourceAddress      = 0xF0024130U;
+    cfg0.destinationAddress = (uint32)&Dest_CircularBuffer_CH0;
+    cfg0.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[51], &cfg0);
+
+	/* channel specific configuration */
+    cfg1.channelId          = IfxDma_ChannelId_50;
+    cfg1.sourceAddress      = 0xF0024230U;
+    cfg1.destinationAddress = (uint32)&Dest_DSADC_HVDC_MEAS0_UC;
+    cfg1.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[49], &cfg1);
+
+	/* channel specific configuration */
+    cfg2.channelId          = IfxDma_ChannelId_51;
+    cfg2.sourceAddress      = 0xF0024330U;
+    cfg2.destinationAddress = (uint32)&Dest_CircularBuffer_CH2;
+    cfg2.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[50], &cfg2);
+
+	/* channel specific configuration */
+    cfg3.channelId          = IfxDma_ChannelId_49;
+    cfg3.sourceAddress      = 0xF0024430U;
+    cfg3.destinationAddress = (uint32)&Dest_DSADC_CURR_PHASE_U_MEAS0_UC;
+    cfg3.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[48], &cfg3);
+
+	/* channel specific configuration */
+    cfg4.channelId          = IfxDma_ChannelId_48;
+    cfg4.sourceAddress      = 0xF0024530U;
+    cfg4.destinationAddress = (uint32)&Dest_DSADC_CURR_PHASE_V_MEAS0_UC;
+    cfg4.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[47], &cfg4);
+
+	/* channel specific configuration */
+    cfg5.channelId          = IfxDma_ChannelId_47;
+    cfg5.sourceAddress      = 0xF0024630U;
+    cfg5.destinationAddress = (uint32)&Dest_DSADC_CURR_PHASE_W_MEAS0_UC;
+    cfg5.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[46], &cfg5);
+
+    cfgtim0_1.channelId          = IfxDma_ChannelId_46;
+	cfgtim0_1.sourceAddress      = 0xF0101280U;
+    cfgtim0_1.destinationAddress = (uint32)&Dest_TIMESTAMP_A;
+    cfgtim0_1.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[45], &cfgtim0_1);
+
+    cfgtim0_5.channelId          = IfxDma_ChannelId_45;
+    cfgtim0_5.sourceAddress      = 0xF0101080U;
+    cfgtim0_5.destinationAddress = (uint32)&Dest_TIMESTAMP_B;
+    cfgtim0_5.hardwareRequestEnabled = 1;
+    IfxDma_Dma_initChannel(&Dma_Adc_Channels.drivers.chn[44], &cfgtim0_5);
+
+
+    DMA_CDD_Init_Fault_Check_l(&MODULE_DMA);
+
+}
+
+
+void Read_VADC_GDPS_BOT_P16V_MEAS_UC(void)
+{
+	static uint16 GDPS_BOT_P16V_MEAS_UC;
+	GDPS_BOT_P16V_MEAS_UC = Dest_GDPS_BOT_P16V_MEAS_UC;
+}
+
+void Read_VADC_KL30_FILT_MEAS_UC(void)
+{
+	static uint16 KL30_FILT_MEAS_UC;
+	KL30_FILT_MEAS_UC = Dest_KL30_FILT_MEAS_UC;
+}
+void Read_VADC_CURR_PHASE_U_MEAS1_UC(void)
+{
+	static uint16 CURR_PHASE_U_MEAS1_UC;
+	CURR_PHASE_U_MEAS1_UC = Dest_CURR_PHASE_U_MEAS1_UC;
+}
+void Read_VADC_KL30_FILT_MEAS_UC(void)
+{
+	static uint16 KL15_MEAS_UC;
+	KL15_MEAS_UC = Dest_KL15_MEAS_UC;
+}
+void Read_VADC_KL15_MEAS_UC(void)
+{
+	static uint16 KL15_MEAS_UC;
+	KL15_MEAS_UC = Dest_KL15_MEAS_UC;
+}
+void Read_VADC_FLYBACK_P16V_MEAS_UC(void)
+{
+	static uint16 FLYBACK_P16V_MEAS_UC;
+	FLYBACK_P16V_MEAS_UC = Dest_CircularBuffer_G1[0];
+}
+void Read_VADC_KL31_MEAS_UC(void)
+{
+	static uint16 KL31_MEAS_UC;
+	KL31_MEAS_UC = Dest_CircularBuffer_G1[1];
+}
+void Read_VADC_MUX_OUT_SBC_MEAS_UC(void)
+{
+	static uint16 MUX_OUT_SBC_MEAS_UC;
+	MUX_OUT_SBC_MEAS_UC = Dest_CircularBuffer_G1[2];
+}
+void Read_VADC_P5V_MEAS_UC(void)
+{
+	static uint16 P5V_MEAS_UC;
+	P5V_MEAS_UC = Dest_CircularBuffer_G1[3];
+}
+void Read_VADC_VCCA_MEAS_UC(void)
+{
+	static uint16 VCCA_MEAS_UC;
+	VCCA_MEAS_UC = Dest_VCCA_MEAS_UC;
+}
+void Read_VADC_CURR_PHASE_V_MEAS1_UC(void)
+{
+	static uint16 CURR_PHASE_V_MEAS1_UC;
+	CURR_PHASE_V_MEAS1_UC = Dest_CURR_PHASE_V_MEAS1_UC;
+}
+void Read_VADC_VAUX_UC_MEAS_UC(void)
+{
+	static uint16 VAUX_UC_MEAS_UC;
+	VAUX_UC_MEAS_UC = Dest_VAUX_UC_MEAS_UC;
+}
+void Read_VADC_KL30_FILT0_MEAS_UC(void)
+{
+	static uint16 KL30_FILT0_MEAS_UC;
+	KL30_FILT0_MEAS_UC = Dest_KL30_FILT0_MEAS_UC;
+}
+void Read_VADC_Motor_TEMP_SENSE1_UC(void)
+{
+	static uint16 Motor_TEMP_SENSE1_UC;
+	Motor_TEMP_SENSE1_UC = Dest_Motor_TEMP_SENSE1_UC;
+}
+void Read_VADC_CURR_PHASE_W_MEAS1_UC(void)
+{
+	static uint16 CURR_PHASE_W_MEAS1_UC;
+	CURR_PHASE_W_MEAS1_UC = Dest_CURR_PHASE_W_MEAS1_UC;
+}
+void Read_VADC_BUCK_BOOST_P16V_MEAS_UC(void)
+{
+	static uint16 BUCK_BOOST_P16V_MEAS_UC;
+	BUCK_BOOST_P16V_MEAS_UC = Dest_BUCK_BOOST_P16V_MEAS_UC;
+}
+void Read_VADC_Motor_TEMP_SENSE2_UC(void)
+{
+	static uint16 Motor_TEMP_SENSE2_UC;
+	Motor_TEMP_SENSE2_UC = Dest_CircularBuffer_G3[0];
+}
+void Read_VADC_Oil_TEMP_SENSE_UC(void)
+{
+	static uint16 Oil_TEMP_SENSE_UC;
+	Oil_TEMP_SENSE_UC = Dest_CircularBuffer_G3[1];
+}
+void Read_VADC_KL30_INV_MEAS_UC(void)
+{
+	static uint16 KL30_INV_MEAS_UC;
+	KL30_INV_MEAS_UC = Dest_KL30_INV_MEAS_UC;
+}
+void Read_VADC_CB_TEMP_SENSE_UC(void)
+{
+	static uint16 KL30_INV_MEAS_UC;
+	KL30_INV_MEAS_UC = Dest_KL30_INV_MEAS_UC;
+}
+void Read_VADC_HVDC_MEAS1_UC(void)
+{
+	static uint16 KL30_INV_MEAS_UC;
+	KL30_INV_MEAS_UC = Dest_KL30_INV_MEAS_UC;
+}
+void Read_VADC_PARKLOCK_I_UC(void)
+{
+	static uint16 KL30_INV_MEAS_UC;
+	KL30_INV_MEAS_UC = Dest_CircularBuffer_G4[0];
+}
+void Read_VADC_KL30_PARKLOCK_VBUS_MEAS_UC(void)
+{
+	static uint16 KL30_INV_MEAS_UC;
+	KL30_INV_MEAS_UC = Dest_CircularBuffer_G4[1];
+}
+void Read_VADC_P5V_EXT_MEAS_UC(void)
+{
+	static uint16 KL30_INV_MEAS_UC;
+	KL30_INV_MEAS_UC = Dest_KL30_INV_MEAS_UC;
+}
+
+/*
+void Read_VADC_PL_POSITIONSENSOR1_UC(void)
+{
+	static uint16 KL30_INV_MEAS_UC;
+	KL30_INV_MEAS_UC = Dest_KL30_INV_MEAS_UC;
+}*/
+
+void Read_VADC_PARKLOCK_VBB_MEAS_UC(void)
+{
+	static uint16 KL30_INV_MEAS_UC;
+	KL30_INV_MEAS_UC = Dest_KL30_INV_MEAS_UC;
+}
+void Read_VADC_RDC_COS_MEAS1_UC(void)
+{
+	static uint16 KL30_INV_MEAS_UC;
+	KL30_INV_MEAS_UC = Dest_KL30_INV_MEAS_UC;
+}
+void Read_VADC_RDC_COS0_MEAS1_UC(void)
+{
+	static uint16 KL30_INV_MEAS_UC;
+	KL30_INV_MEAS_UC = Dest_KL30_INV_MEAS_UC;
+}
+void Read_VADC_REF_P7_5V_MEAS_UC(void)
+{
+	static uint16 KL30_INV_MEAS_UC;
+	KL30_INV_MEAS_UC = Dest_CircularBuffer_G8[0];
+}
+void Read_VADC_MII0_P3V3_MEAS_UC(void)
+{
+	static uint16 KL30_INV_MEAS_UC;
+	KL30_INV_MEAS_UC = Dest_CircularBuffer_G8[1];
+}
+/*
+void Read_VADC_HW_VERSION_H_UC(void)
+{
+	static uint16 KL30_INV_MEAS_UC;
+	KL30_INV_MEAS_UC = Dest_CircularBuffer_Hw_Version_G8[0];
+}
+void Read_VADC_HW_VERSION_L_UC(void)
+{
+	static uint16 KL30_INV_MEAS_UC;
+	KL30_INV_MEAS_UC = Dest_CircularBuffer_Hw_Version_G8[1];
+}
+*/
+
+void Read_VADC_RDC_SIN_MEAS1_UC(void)
+{
+	static uint16 KL30_INV_MEAS_UC;
+	KL30_INV_MEAS_UC = Dest_KL30_INV_MEAS_UC;
+}
+void Read_VADC_RDC_SIN0_MEAS1_UC(void)
+{
+	static uint16 KL30_INV_MEAS_UC;
+	KL30_INV_MEAS_UC = Dest_KL30_INV_MEAS_UC;
+}
+void Read_VADC_RDC_EXC_MEAS_UC(void)
+{
+	static uint16 KL30_INV_MEAS_UC;
+	KL30_INV_MEAS_UC = Dest_KL30_INV_MEAS_UC;
+}
+void Read_VADC_RDC_EXC0_MEAS_UC(void)
+{
+	static uint16 KL30_INV_MEAS_UC;
+	KL30_INV_MEAS_UC = Dest_KL30_INV_MEAS_UC;
+}
+void Read_VADC_VDD_MEAS_UC(void)
+{
+	static uint16 KL30_INV_MEAS_UC;
+	KL30_INV_MEAS_UC = Dest_KL30_INV_MEAS_UC;
+}
+void Read_VADC_P5V_RDC_MEAS_UC(void)
+{
+	static uint16 KL30_INV_MEAS_UC;
+	KL30_INV_MEAS_UC = Dest_KL30_INV_MEAS_UC;
+}
+void Read_VADC_CAN_P5V_LDO_MEAS_UC(void)
+{
+	static uint16 KL30_INV_MEAS_UC;
+	KL30_INV_MEAS_UC = Dest_KL30_INV_MEAS_UC;
+}
+void Read_VADC_REF_P2V5(void)
+{
+	static uint16 KL30_INV_MEAS_UC;
+	KL30_INV_MEAS_UC = Dest_KL30_INV_MEAS_UC;
+}
+void Read_VADC_FL3_P5V_LDO_MEAS_UC(void)
+{
+	static uint16 KL30_INV_MEAS_UC;
+	KL30_INV_MEAS_UC = Dest_KL30_INV_MEAS_UC;
+}
+void Read_VADC_P6V5_VPRE_MEAS_UC(void)
+{
+	static uint16 KL30_INV_MEAS_UC;
+	KL30_INV_MEAS_UC = Dest_KL30_INV_MEAS_UC;
+}
+/*
+void Read_VADC_FLYBACK_P16V_OV_ST_UC(void)
+{
+	static uint16 KL30_INV_MEAS_UC;
+	KL30_INV_MEAS_UC = Dest_KL30_INV_MEAS_UC;
+}
+void Read_VADC_BUCK_BOOST_OV_ST_UC(void)
+{
+	static uint16 KL30_INV_MEAS_UC;
+	KL30_INV_MEAS_UC = Dest_KL30_INV_MEAS_UC;
+}
+void Read_VADC_HVDC_OV_MON_UC(void)
+{
+	static uint16 HVDC_OV_MON_UC;
+	HVDC_OV_MON_UC = Dest_HVDC_OV_MON_UC;
+}
+*/
+
+void Read_DSADC_RDC_COS_MEAS0_UC(void)
+{
+	static uint16 RDC_COS_MEAS0_UC;
+	RDC_COS_MEAS0_UC = Dest_CircularBuffer_CH0[0];
+}
+
+void Read_DSADC_RDC_COS0_MEAS0_UC(void)
+{
+	static uint16 RDC_COS0_MEAS0_UC;
+	RDC_COS0_MEAS0_UC = Dest_CircularBuffer_CH0[1];
+}
+
+void Read_DSADC_RDC_SIN_MEAS0_UC(void)
+{
+	static uint16 RDC_SIN_MEAS0_UC;
+	RDC_SIN_MEAS0_UC = Dest_CircularBuffer_CH2[0];
+}
+
+void Read_DSADC_RDC_SIN0_MEAS0_UC(void)
+{
+	static uint16 RDC_SIN0_MEAS0_UC;
+	RDC_SIN0_MEAS0_UC = Dest_CircularBuffer_CH2[1];
+}
+
+/*
+void Read_DSADC_HVDC_MEAS0_UC(void)
+{
+	static uint16 HVDC_MEAS0_UC;
+	HVDC_MEAS0_UC = Dest_DSADC_HVDC_MEAS0_UC;
+}
+
+void Read_DSADC_CURR_PHASE_U_MEAS0_UC(void)
+{
+	static uint16 CURR_PHASE_U_MEAS0_UC;
+	CURR_PHASE_U_MEAS0_UC = Dest_DSADC_CURR_PHASE_U_MEAS0_UC;
+}
+
+void Read_DSADC_CURR_PHASE_V_MEAS0_UC(void)
+{
+	static uint16 CURR_PHASE_V_MEAS0_UC;
+	CURR_PHASE_V_MEAS0_UC = Dest_DSADC_CURR_PHASE_V_MEAS0_UC;
+}
+
+void Read_DSADC_CURR_PHASE_W_MEAS0_UC(void)
+{
+	static uint16 CURR_PHASE_W_MEAS0_UC;
+	CURR_PHASE_W_MEAS0_UC = Dest_DSADC_CURR_PHASE_W_MEAS0_UC;
+}
+*/
+
+void Read_TIM_TIMESTAMP_A(void)
+{
+	static uint16 TIMESTAMP_A;
+	TIMESTAMP_A = Dest_TIMESTAMP_A;
+}
+
+void Read_TIM_TIMESTAMP_B(void)
+{
+	static uint16 TIMESTAMP_B;
+	TIMESTAMP_B = Dest_TIMESTAMP_B;
+}
+
+
+void Dma_CDD_TRL_Fault_Check(void)
+{
+
+	/*static uint32 *Tsr01;
+	static uint32 *Tsr02;
+	static uint32 *Tsr03;
+	static uint32 *Tsr04;
+	static uint32 *Tsr05;
+	static uint32 *Tsr06;
+	static uint32 *Tsr07;*/
+
+	static uint32 *Tsr08;
+	static uint32 *Tsr09;
+	static uint32 *Tsr10;
+
+	static uint32 *Tsr11;
+	static uint32 *Tsr12;
+	static uint32 *Tsr13;
+	static uint32 *Tsr14;
+	static uint32 *Tsr15;
+	static uint32 *Tsr16;
+	static uint32 *Tsr17;
+	static uint32 *Tsr18;
+	//static uint32 *Tsr19;
+	static uint32 *Tsr20;
+
+	static uint32 *Tsr21;
+	static uint32 *Tsr22;
+	static uint32 *Tsr23;
+	static uint32 *Tsr24;
+	static uint32 *Tsr25;
+	static uint32 *Tsr26;
+	static uint32 *Tsr27;
+	static uint32 *Tsr28;
+	static uint32 *Tsr29;
+	//static uint32 *Tsr30;
+
+	static uint32 *Tsr31;
+	static uint32 *Tsr32;
+	static uint32 *Tsr33;
+	static uint32 *Tsr34;
+	static uint32 *Tsr35;
+	static uint32 *Tsr36;
+	static uint32 *Tsr37;
+	static uint32 *Tsr38;
+	static uint32 *Tsr39;
+	static uint32 *Tsr40;
+
+	static uint32 *Tsr41;
+	//static uint32 *Tsr42;
+	//static uint32 *Tsr43;
+	//static uint32 *Tsr44;
+	//static uint32 *Tsr45;
+	//static uint32 *Tsr46;
+	//static uint32 *Tsr47;
+	//static uint32 *Tsr48;
+	static uint32 *Tsr49;
+	static uint32 *Tsr50;
+
+	static uint32 *Tsr51;
+	static uint32 *Tsr52;
+
+  /*Tsr00 = (uint32 *)0xF0011E00U;
+    Tsr01 = (uint32 *)0xF0011E04U;
+	Tsr02 = (uint32 *)0xF0011E08U;
+	Tsr03 = (uint32 *)0xF0011E0CU;
+	Tsr04 = (uint32 *)0xF0011E10U;
+	Tsr05 = (uint32 *)0xF0011E14U;
+	Tsr06 = (uint32 *)0xF0011E18U;
+	Tsr07 = (uint32 *)0xF0011E1CU;*/
+
+	Tsr08 = (uint32 *)0xF0011E20U;
+	Tsr09 = (uint32 *)0xF0011E24U;
+	Tsr10 = (uint32 *)0xF0011E28U;
+	Tsr11 = (uint32 *)0xF0011E2CU;
+	Tsr12 = (uint32 *)0xF0011E30U;
+	Tsr13 = (uint32 *)0xF0011E34U;
+	Tsr14 = (uint32 *)0xF0011E38U;
+	Tsr15 = (uint32 *)0xF0011E3CU;
+	Tsr16 = (uint32 *)0xF0011E40U;
+	Tsr17 = (uint32 *)0xF0011E44U;
+	Tsr18 = (uint32 *)0xF0011E48U;
+	//Tsr19 = (uint32 *)0xF0011E4CU;
+	Tsr20 = (uint32 *)0xF0011E50U;
+
+	Tsr21 = (uint32 *)0xF0011E54U;
+	Tsr22 = (uint32 *)0xF0011E58U;
+	Tsr23 = (uint32 *)0xF0011E5CU;
+	Tsr24 = (uint32 *)0xF0011E60U;
+	Tsr25 =(uint32 *) 0xF0011E64U;
+	Tsr26 =(uint32 *) 0xF0011E68U;
+	Tsr27 =(uint32 *) 0xF0011E6CU;
+	Tsr28 =(uint32 *) 0xF0011E70U;
+	Tsr29 =(uint32 *) 0xF0011E74U;
+	//Tsr30 =(uint32 *) 0xF0011E78U;
+
+	Tsr31 = (uint32 *)0xF0011E7CU;
+	Tsr32 = (uint32 *)0xF0011E80U;
+	Tsr33 = (uint32 *)0xF0011E84U;
+	Tsr34 = (uint32 *)0xF0011E88U;
+	Tsr35 =(uint32 *) 0xF0011E8CU;
+	Tsr36 =(uint32 *) 0xF0011E90U;
+	Tsr37 =(uint32 *) 0xF0011E94U;
+	Tsr38 =(uint32 *) 0xF0011E98U;
+	Tsr39 =(uint32 *) 0xF0011E9CU;
+	Tsr40 =(uint32 *) 0xF0011EA0U;
+
+	Tsr41 = (uint32 *)0xF0011EA4U;
+	//Tsr42 = (uint32 *)0xF0011EA8U;
+	//Tsr43 = (uint32 *)0xF0011EACU;
+	//Tsr44 = (uint32 *)0xF0011EB0U;
+	//Tsr45 =(uint32 *) 0xF0011EB4U;
+	//Tsr46 =(uint32 *) 0xF0011EB8U;
+	//Tsr47 =(uint32 *) 0xF0011EBCU;
+	//Tsr48 =(uint32 *) 0xF0011EC0U;
+	Tsr49 =(uint32 *) 0xF0011EC4U;
+	Tsr50 =(uint32 *) 0xF0011EC8U;
+
+	Tsr51 = (uint32 *)0xF0011ECCU;
+	Tsr52 = (uint32 *)0xF0011ED0U;
+
+
+	if((((uint32)(*(Tsr08) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr09) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr10) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr11) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr12) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr13) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr14) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr15) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr16) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr17) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr18) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr20) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr21) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr22) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr23) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr24) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr25) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr26) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr27) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr28) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr29) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr31) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr32) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr33) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr34) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr35) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr36) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr37) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr38) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr39) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr40) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr41) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr49) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr50) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr51) & (uint32)0x00000004U)) == ((uint32)0x00000004U))
+	 ||(((uint32)(*(Tsr52) & (uint32)0x00000004U)) == ((uint32)0x00000004U)))
+
+	{
+		(void)Rte_Call_R_Transfer_failure_SetEventStatus(CDD_DMA_TRANSFER_FAULT_EVENT_STATUS_FAIL);
+	}
+	else
+	{
+		/*Do nothing*/
+	}
+
+}
+
+
+void DMA_CDD_Init_Fault_Check_l(const Ifx_DMA *dma)
+{
+	if((dma->CLC.B.DISS) != 0U)
+	{
+		(void)Dem_ReportErrorStatus((Dem_EventIdType)CDD_DMA_INIT_FAULT_EVENT_ID,(Dem_EventStatusType)CDD_DMA_INIT_FAULT_EVENT_STATUS);
+	}
+}
+
+void Cdd_DMA_DeInit(Ifx_DMA *dma)
+{
+
+	uint16 passwd = IfxScuWdt_getCpuWatchdogPassword();
+ 
+	IfxScuWdt_clearCpuEndinit(passwd);
+
+
+	dma->CLC.B.DISR = 1;
+
+	IfxScuWdt_setCpuEndinit(passwd);
+}
+
+void DMA_CDD_DeInit(void)
+{
+
+	Cdd_DMA_DeInit(&MODULE_DMA);
+
+}
+
+
+
