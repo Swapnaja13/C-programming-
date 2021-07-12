@@ -1,0 +1,22 @@
+#include <stdio.h>
+
+int left_rotate(int n,unsigned int d)
+{
+    return (n<<d)|(n>>(32-d));
+}
+int right_rotate(int n,unsigned int d)
+{
+    return (n>>d)|(n<<(32-d));
+}
+
+int main()
+{
+    int n=16;
+    int d=2;
+    
+    printf("%d\n",left_rotate(n,d));
+    printf("%d\n",right_rotate(n,d));
+    
+
+    return 0;
+}
