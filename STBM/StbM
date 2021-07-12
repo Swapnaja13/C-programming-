@@ -1,0 +1,40 @@
+	
+STBM - focuses on Synchronization of RunnableEntities
+The Synchronized Time-Base Manager (StbM) is a Basic Software Module of the System Services.
+
+1. Synchronized Time-Base Manager is to provide a “global
+time” to other BSW modules or to the application. 
+
+2.Global time means, that different entities within the system 
+have the same definition of time and passage of time
+
+3.In the system, multiple “global times” can exist simultaneously 
+
+4. Synchronized Time-Base Manager shall provide means for state/error notification 
+
+Main use cases for the application of the Synchronized Time-Base Manager are the
+following:
+ Synchronized execution of several RunnableEntities within one system cluster
+ Provision of an accurate definition of the absolute value of time
+ Provision of an accurate definition of the passage of time
+
+Time provision -
+Guaranteeing the accurate triggering of OS alarms every (well-defined)interval.
+
+The application (and other BSW modules) shall have a central module that is
+responsible for the provision of information about the absolute time and passage of
+time.
+
+Absolute time provision -
+In some cases an absolute time value (relative to the start of the ECU) is needed.
+E.g. in safety related systems it might be necessary to test the system every 48
+hours.
+
+
+
+. If AUTOSAR compliant application software  must execute with a predictable timing 
+ a suitable common time definition must be used. 
+ The STBM is responsible for the propagation of such a time definition.
+ 
+ 
+ 
