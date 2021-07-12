@@ -1,0 +1,62 @@
+KERNEL	https://www.geeksforgeeks.org/kernel-in-operating-system/	 
+		https://www.geeksforgeeks.org/monolithic-kernel-and-key-differences-from-microkernel/
+		https://www.geeksforgeeks.org/user-mode-and-kernel-mode-switching/
+
+MAIN		https://www.geeksforgeeks.org/difference-int-main-int-mainvoid/
+
+CONSTANT QUALIFIER   https://www.geeksforgeeks.org/const-qualifier-in-c/
+VOLATILE https://www.geeksforgeeks.org/understanding-volatile-qualifier-c-set-1-introduction/?ref=rp
+
+Socket:	https://www.geeksforgeeks.org/socket-programming-cc/
+Threads: https://www.geeksforgeeks.org/multithreading-c-2/
+
+		https://man7.org/linux/man-pages/man3/pthread_join.3.html
+		https://man7.org/linux/man-pages/man3/pthread_exit.3.html
+		https://man7.org/linux/man-pages/man3/pthread_create.3.html
+		
+Binary Semaphore in thread		http://www.vishalchovatiya.com/binary-semaphore-example-between-threads-in-c/
+		
+FUNCTION POINTER	https://www.geeksforgeeks.org/function-pointer-in-c/
+
+Bitfields 	https://www.geeksforgeeks.org/bit-fields-c/
+
+
+Semaphore  https://www.geeksforgeeks.org/semaphores-in-process-synchronization/
+			https://www.geeksforgeeks.org/mutex-vs-semaphore/
+			
+			https://www.geeksforgeeks.org/use-posix-semaphores-c/
+
+Mmemory layout https://www.geeksforgeeks.org/memory-layout-of-c-program/
+
+INTERRUPTS https://www.geeksforgeeks.org/difference-between-hardware-interrupt-and-software-interrupt/
+			
+Malloc			https://www.geeksforgeeks.org/g-fact-88/
+		https://www.geeksforgeeks.org/what-happens-when-you-dont-free-memory-after-using-malloc/?ref=rp
+		
+Shared memory		https://www.geeksforgeeks.org/ipc-shared-memory/
+Message Queue		https://www.geeksforgeeks.org/ipc-using-message-queues/?ref=rp
+				https://www.geeksforgeeks.org/difference-between-shared-memory-model-and-message-passing-model-in-ipc/?ref=rp
+				
+PIPE				https://www.geeksforgeeks.org/ipc-technique-pipes/?ref=rp
+					https://www.geeksforgeeks.org/named-pipe-fifo-example-c-program/
+					
+Processes				https://www.geeksforgeeks.org/processes-in-linuxunix/
+	
+Physical and logical memory	https://www.geeksforgeeks.org/logical-and-physical-address-in-operating-system/
+	
+ARP & RARP	https://www.geeksforgeeks.org/difference-between-arp-and-rarp/
+	
+MAC&IP				https://www.geeksforgeeks.org/difference-between-mac-address-and-ip-address/
+Router &Switch	https://www.geeksforgeeks.org/difference-between-router-and-switch/
+
+OSI Layer   https://www.geeksforgeeks.org/layers-of-osi-model/
+
+TCP/IP		https://www.geeksforgeeks.org/tcp-ip-model/
+TCP&UDP    https://www.geeksforgeeks.org/differences-between-tcp-and-udp/
+
+SPINLOCK https://stackoverflow.com/questions/5869825/when-should-one-use-a-spinlock-instead-of-mutex
+
+CAN https://www.youtube.com/watch?v=--QANl29EP0
+
+
+https://www.usenix.org/legacy/publications/library/proceedings/usenix03/tech/freenix03/full_papers/gruenbacher/gruenbacher_html/main.html
