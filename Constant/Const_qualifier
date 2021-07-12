@@ -1,0 +1,35 @@
+ 1. Pointer to variable		 int *ptr=&i;
+							*ptr=100;
+							 ptr=&j;
+	
+ 
+ 2. Pointer to constant	variable		  int i=10;int j;
+								 const int *ptr=&i;
+								 int const *ptr=&i;
+							     *ptr=100;		// error  ROM
+								  ptr=&j;		// valid
+								  
+								   int const i=10;int j;
+								 int const *ptr=&i;
+							     *ptr=100;		// error  ROM
+								  ptr=&j;		// valid -> up qualification
+								  
+								  int i=10; int const j=20;
+								 int *ptr=&i;
+							     
+								  ptr=&j;	// valid  -> down qualification(not allowed in C++)
+								
+  3. Constant pointer to variable 
+										int i=10; int j=20;
+										int *const ptr=&i;
+										*ptr= 100;  //valid 
+										ptr=&j;		//error 
+  
+  
+  4.constant pointer to constant integer 
+											   int i=10; int j=20;
+												const int *const ptr = &i;
+												*ptr=100;   // error
+												ptr=&j; 	//error  
+												
+												
