@@ -1,0 +1,14 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+   int *res=(int*)malloc(sizeof(int));
+   int i=2147483640,j=10;
+   *res=i+j;
+   if(i>0 && j>0 && *res<0)
+   //if(i>32-j)
+    printf("overflow\n");
+   if(i<0 && j<0 && *res>0)
+    printf("overflow2\n");
+}
