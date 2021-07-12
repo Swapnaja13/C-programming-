@@ -1,0 +1,15 @@
+#include <stdio.h>
+
+#define POWER_OF_TWO(NUM) (NUM &&(!(NUM)&(NUM-1)))  //1->POWER OF TWO
+#define ODD(NUM) ((NUM&1)==1)  //1->ODD
+
+#define SET(DATA,BIT) ((DATA)|(0X01<<BIT))
+#define RESET(DATA,BIT)  ((DATA)&(~(0X01<<BIT)))
+#define TOGGLE(DATA,BIT) ((DATA)^(0X01<<BIT))
+
+#define SWAPNIBBLES(NUM) ( ( (NUM&0X0F)<<4)|(NUM&0XF0)>>4) ) )
+#define SWAPBYTES(NUM) ( ( (NUM&0X00FF)<<8)|(NUM&0XFF00)>>8) ) )
+#define SWAPENDIANESS(X) ( (x>>24)|((x>>8)&0x0000FF00)|((x<<8)&0x00FF0000)|(x<<24) )
+
+#define SWAP(X,Y) (X^=Y^=X^=Y)
+
