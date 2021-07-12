@@ -1,0 +1,16 @@
+#include<stdio.h>
+
+int main()
+{
+    int num,res=0,n=7;
+    
+    printf("Enter the number\n");
+    scanf("%d",&num);
+    
+    while(n!=0)
+    {
+        res=res+num;
+        n--;
+    }
+    printf("%d",res);
+}
