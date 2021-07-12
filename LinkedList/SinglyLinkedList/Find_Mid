@@ -1,0 +1,14 @@
+void find_mid(struct node*head)
+{
+    struct node*ptr1=head,*ptr2=head;
+    
+    if(head!=NULL)
+    {
+        while(ptr2!=NULL && ptr2->link!=NULL)
+        {
+            ptr2=ptr2->link->link;
+            ptr1=ptr1->link;
+        }
+        printf("Mid=%d",ptr1->data);
+    }
+}
