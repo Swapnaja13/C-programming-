@@ -1,0 +1,36 @@
+
+// Swap Nibble bytes      	 #define swapNibble(data) (((data & (0x0F)) <<4)|((data & (0xF0)>>4) >>4))
+	 
+	 unsigned char swapNibble(unsigned char n)
+	 {	return (((n & (0x0F))<< 4)|((n & (0xF0))>>4)); }
+	 
+// Swap 2bytes						#define SwapTwobytes(data) (((data &(0x00FF))<<8)|((data & (0xFF00))>>8))
+ 
+// Swap two numbers 					#define swap(x,y) (x^=y^=x^=y)
+ 
+	 x=x^y;		x=x+y;
+	 y=x^y;		y=x-y;
+	 x=x^y;		x=x-y;
+	 
+//Set the bit    					#define SETBIT(N,B) ((N)|((0x01)<<(B)))
+//Reset the bit						#define RESET(N,B)  ((N)&(~(0x01)<<(B)))
+//Toggle the bit 					#define TOGGLE(N,B)  ((N)^((0x01)<<(B)))
+	 
+//Check if two nos. are equal
+ 
+	 if(a^b)      // 00->0, 01->1, 10->1, 11->0
+		printf("Not equal");
+	 else
+	 printf("Equal");
+	 
+// Check Set bits
+
+	while(n!=0)
+	{
+		n&=(n-1);
+		count++;
+	}
+
+//XOR w/o using XOR
+
+	return (x|y)&(~x|~y);
