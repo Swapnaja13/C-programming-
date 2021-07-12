@@ -1,0 +1,58 @@
+//Amstrong:
+
+			q=num;
+			while(q)
+			{   rem=q%10;
+				res=res+(rem*rem*rem);
+				q=q/10;
+			}
+			if(res==num)
+			printf("%d is a Amstrong",num);
+
+
+//Palindrome:
+			q=num;
+			while(q)
+			{
+				rem=q%10;
+				res=res*10+rem;
+				q=q/10;
+			}
+			if(res==num)
+			printf("%d is a Palindrome",num);
+
+
+//Strong number
+
+		int fac(int n)
+		{ int res=1;
+			while(n)
+			{   res=res*n; --n;    }
+		}
+
+		int main() 
+		{
+			int n,rem,num=145,res=0;
+			n=num;
+			while(n)
+			{
+				rem=n%10;
+				res=res+fac(rem);
+				n=n/10;
+			}
+			printf("%d",res);
+		}
+
+//Fabonacci Series
+
+		int i,a=0,b=1,n=6,result;
+		for(i=1;i<=n;i++)
+		{
+			printf("%d ",a);
+			result=a+b;
+			a=b;
+			b=result;
+		}
+		
+
+		
