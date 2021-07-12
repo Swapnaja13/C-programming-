@@ -1,0 +1,31 @@
+
+#include <stdio.h>
+
+int main()
+{
+   int i,j,count=0,n;
+   char str[100];
+   printf("Enter the string\n");
+   //scanf("%[^\n]%*c",&str);
+   gets(str);
+   
+   n=strlen(str);
+    
+    for(i=0;i<n;i++)
+    {
+        count=1;
+        if(str[i])
+        {
+            for(j=i+1;j<n;j++)
+            {
+                if(str[i]==str[j])
+                {
+                    count++;
+                    str[j]='\0';
+                }
+            }
+            printf("%c->%d\n",str[i],count);
+        }
+    }
+    return 0;
+}
